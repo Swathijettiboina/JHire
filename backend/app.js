@@ -5,6 +5,7 @@ const seekerRoutes = require("./routes/seekerRoutes");
 const hrRoutes = require("./routes/hrRoutes");
 const jobRoutes = require("./routes/jobRoutes");
 const authRoutes = require("./routes/authRoutes");
+const companyRoutes = require("./routes/companyRoutes");
 const app = express();
 
 // Middleware
@@ -21,6 +22,8 @@ app.use("/jhire/seeker", seekerRoutes);
 app.use("/jhire/hr", hrRoutes);
 app.use("/jhire/jobs", jobRoutes);
 app.use('/jhire/auth',authRoutes);
+app.use('/jhire/company',companyRoutes);
+
 app.get("/", (req, res) => {
   res.send("Welcome to JHire");
 });

@@ -2,7 +2,7 @@ import { useState } from "react";
 import { ChevronDown } from "lucide-react";
 import { Link } from "react-router-dom";
 
-const Navbar = () => {
+const HRNavbar = () => {
   const [isEmployerMenuOpen, setIsEmployerMenuOpen] = useState(false);
 
   return (
@@ -26,8 +26,8 @@ const Navbar = () => {
       
       {/* Auth Buttons and Employer Menu */}
       <div className="flex items-center space-x-4">
-      <Link to="/login"  className="px-4 py-2 border border-blue-600 text-blue-600 rounded-full hover:bg-blue-50">Login</Link>
-      <Link to="/register" className="px-4 py-2 bg-red-500 text-white rounded-full hover:bg-red-600">Register</Link>
+      <Link to="/alljobs"  className="px-4 py-2 border border-blue-600 text-blue-600 rounded-full hover:bg-blue-50">All Jobs</Link>
+      <Link to="/hr-profile" className="px-4 py-2 bg-red-500 text-white rounded-full hover:bg-red-600">Profile</Link>
         
         {/* Employer Dropdown */}
         <div className="relative">
@@ -49,4 +49,4 @@ const Navbar = () => {
   );
 };
 
-export default Navbar;
+export default HRNavbar;

@@ -1,15 +1,18 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:5000/jhire";
 
 const HRProfileUpdate = () => {
+  const navigate = useNavigate();
+
   const [formData, setFormData] = useState({
-    hr_id: "",
     first_name: "",
     last_name: "",
-    email: "", // Email is read-only
+    email: "", // Read-only
     phone_number: "",
+    age: "",
     gender: "",
     about_me: "",
     university_name: "",
@@ -19,6 +22,8 @@ const HRProfileUpdate = () => {
     skills: "",
     hr_linkedin_profile: "",
     hr_photo: "",
+    role: "",
+    department: "",
   });
 
   const [imagePreview, setImagePreview] = useState("");
@@ -55,14 +60,12 @@ const HRProfileUpdate = () => {
     e.preventDefault();
     try {
       const formDataToSend = new FormData();
-      
       Object.keys(formData).forEach((key) => {
-        if (key !== 'hr_photo') {
+        if (key !== "hr_photo") {
           formDataToSend.append(key, formData[key]);
         }
       });
-      
-      // If the photo is a file, append it
+
       if (formData.hr_photo instanceof File) {
         formDataToSend.append("hr_photo", formData.hr_photo);
       }
@@ -71,7 +74,7 @@ const HRProfileUpdate = () => {
         headers: { "Content-Type": "multipart/form-data" },
       });
 
-      alert("Profile updated successfully!");
+      navigate("/hr-profile");
     } catch (error) {
       console.error("Error updating profile:", error);
     }
@@ -79,9 +82,10 @@ const HRProfileUpdate = () => {
 
   return (
     <div className="min-h-screen bg-blue-50 p-10 flex gap-8">
+      {/* Left Section: Profile Image & Basic Info */}
       <div className="w-1/3 bg-white p-6 rounded-lg shadow-md flex flex-col items-center">
         <h1 className="text-2xl font-bold text-blue-600 mb-4">
-          Hello, {`${formData.first_name} ${formData.last_name} ` || "HR"}!
+          Hello, {`${formData.first_name} ${formData.last_name}` || "HR"}!
         </h1>
         <div className="w-32 h-32 rounded-full overflow-hidden border-4 border-blue-300">
           <img
@@ -114,6 +118,7 @@ const HRProfileUpdate = () => {
         </div>
       </div>
 
+      {/* Right Section: Editable Fields */}
       <div className="w-2/3 bg-white p-6 rounded-lg shadow-md">
         <h2 className="text-lg font-semibold text-gray-700 mb-4">Personal Information</h2>
         <div className="grid grid-cols-2 gap-4 mb-6">
@@ -123,6 +128,16 @@ const HRProfileUpdate = () => {
               type="text"
               name="phone_number"
               value={formData.phone_number}
+              onChange={handleChange}
+              className="w-full p-2 border rounded-lg"
+            />
+          </div>
+          <div>
+            <label className="block text-gray-700 font-medium">Age</label>
+            <input
+              type="number"
+              name="age"
+              value={formData.age}
               onChange={handleChange}
               className="w-full p-2 border rounded-lg"
             />
@@ -145,13 +160,15 @@ const HRProfileUpdate = () => {
 
         <h2 className="text-lg font-semibold text-gray-700 mb-4">Professional Information</h2>
         <form onSubmit={handleSubmit} className="grid grid-cols-2 gap-4">
-          {[ 
+          {[
             { label: "University Name", name: "university_name" },
             { label: "Degree", name: "degree_name" },
             { label: "Specialization", name: "specialization" },
             { label: "Years of Experience", name: "years_of_experience" },
             { label: "Skills", name: "skills" },
             { label: "LinkedIn Profile", name: "hr_linkedin_profile" },
+            { label: "Role", name: "role" },
+            { label: "Department", name: "department" },
           ].map(({ label, name }) => (
             <div key={name}>
               <label className="block text-gray-700 font-medium">{label}</label>
@@ -164,6 +181,7 @@ const HRProfileUpdate = () => {
               />
             </div>
           ))}
+
           <div className="col-span-2">
             <label className="block text-gray-700 font-medium">About Me</label>
             <textarea
@@ -173,6 +191,7 @@ const HRProfileUpdate = () => {
               className="w-full p-2 border rounded-lg h-24 resize-none"
             />
           </div>
+
           <div className="col-span-2 flex justify-center">
             <button type="submit" className="bg-blue-500 text-white px-6 py-2 rounded-lg hover:bg-blue-600">
               Update Profile
