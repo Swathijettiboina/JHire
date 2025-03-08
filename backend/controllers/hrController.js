@@ -5,7 +5,7 @@ const extractDomain = (email) => email.split("@")[1];
 
 // HR Registration Controller
 const registerHR = async (req, res) => {
-    const { first_name, last_name, email, password, phone_number, role, department, years_of_experience } = req.body;
+    const { first_name, last_name, email, password, phone_number, role,  } = req.body;
     const emailDomain = extractDomain(email);
 
     try {
@@ -45,8 +45,6 @@ const registerHR = async (req, res) => {
                 password_hash: hashedPassword,
                 phone_number,
                 role,
-                department,
-                years_of_experience,
                 company_id: companyId
             }])
             .select("hr_id, first_name, last_name, email, company_id");

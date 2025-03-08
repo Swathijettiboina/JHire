@@ -8,11 +8,11 @@ const JobCard = ({ job }) => {
   return (
     <div className="w-full p-6 border rounded-2xl shadow-lg bg-white mb-6 flex items-center">
       {/* Company Logo */}
-      <div className="w-20 h-20 flex-shrink-0">
+      <div className="w-20 h-20 rounded-full flex-shrink-0">
         <img 
-          src={company.company_logo || "joblogo.png"} 
+          src={company.company_logo ||`https://ui-avatars.com/api/?name=${job.job_title}`|| "joblogo.png"} 
           alt={company.company_name || "Company Logo"} 
-          className="w-full h-full rounded-lg object-cover"
+          className="w-full h-full rounded-full object-cover"
         />
       </div>
 
