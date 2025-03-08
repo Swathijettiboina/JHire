@@ -20,6 +20,7 @@ const getAllSeekers = async (req, res) => {
 const getSeekerById = async (req, res) => {
     try {
         const { id } = req.params;
+        console.log(id);
         const { data, error } = await supabase
             .from('seeker_table')
             .select('*')
@@ -71,5 +72,58 @@ const registerSeeker = async (req, res) => {
         return res.status(500).json({ message: 'Server error' });
     }
 };
+const getSavedJobs = async (req, res) => {
+    try {
+        console.log("📢 Fetching saved jobs for seeker:", req.params.id);
 
-module.exports = { getAllSeekers, getSeekerById, registerSeeker };
+        const seeker_id = req.params.id.trim(); // 🔥 Trim extra spaces or newlines
+
+        if (!seeker_id) {
+            return res.status(400).json({ error: "Seeker ID is required" });
+        }
+
+        // Fetch saved job IDs
+        const { data: savedJobs, error: savedJobsError } = await supabase
+            .from("saved_jobs")
+            .select("job_id")
+            .eq("seeker_id", seeker_id);
+
+        if (savedJobsError) {
+            console.error("❌ Supabase Error (saved_jobs):", savedJobsError.message);
+            return res.status(500).json({ error: savedJobsError.message });
+        }
+
+        console.log("✅ Saved Job IDs:", savedJobs);
+        const jobIds = savedJobs.map((job) => job.job_id);
+
+        if (jobIds.length === 0) {
+            return res.status(200).json({ savedJobs: [] });
+        }
+
+        // Fetch job details
+        const { data: jobDetails, error: jobDetailsError } = await supabase
+            .from("jobs_table")
+            .select(`
+                job_id,
+                job_title,
+                job_location,
+                job_type,
+                company_table ( company_name )  
+            `)
+            .in("job_id", jobIds);
+
+        if (jobDetailsError) {
+            console.error("❌ Supabase Error (jobs_table):", jobDetailsError.message);
+            return res.status(500).json({ error: jobDetailsError.message });
+        }
+
+        console.log("✅ Job Details:", jobDetails);
+        return res.status(200).json({ savedJobs: jobDetails });
+
+    } catch (err) {
+        console.error("❌ Internal Server Error:", err);
+        return res.status(500).json({ error: "Internal server error" });
+    }
+};
+
+module.exports = { getAllSeekers, getSeekerById, registerSeeker,getSavedJobs };
