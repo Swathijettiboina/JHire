@@ -11,9 +11,10 @@ const HRProfile = () => {
 
   useEffect(() => {
     axios
-      .get(`${API_BASE_URL}/hr/451b4287-0cfd-461c-b597-aca9e6027e8f`)
+      .get(`${API_BASE_URL}/hr/e5e3db6b-ad57-4977-96b3-288a4cba27bd`)
       .then((response) => {
         setProfile(response.data);
+        console.log(response.data)
       })
       .catch((error) => console.error("Error fetching HR profile:", error));
   }, []);
