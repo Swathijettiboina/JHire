@@ -63,9 +63,7 @@ const HRDashboard = () => {
           <li className="mb-4 flex items-center justify-center gap-3 text-lg font-semibold hover:text-gray-300 cursor-pointer" onClick={() => setActiveTab("post-job")}>
             <FaPlus /> Post a Job
           </li>
-          <li className="mt-8 text-red-400 flex items-center justify-center gap-3 text-lg font-semibold hover:text-red-600 cursor-pointer">
-            <FaSignOutAlt /> Logout
-          </li>
+         
         </ul>
       </div>
 

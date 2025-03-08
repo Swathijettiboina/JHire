@@ -1,5 +1,5 @@
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import { UserProvider } from "./context/UserContext"; // ✅ Wrap app with user context
+import { UserProvider } from "./context/UserContext"; //  Context for global auth state
 import ViewJob from "./components/JobComponents/ViewJob";
 import JobFiltering from "./components/JobComponents/JobFiltering";
 import JobListing from "./components/JobComponents/JobListing";
@@ -9,31 +9,27 @@ import Home from "./components/HomeComponents/Home";
 import Login from "./components/Auth/Login";
 import HRDashboard from "./components/HRComponents/HRDashboard";
 import AuthNavbar from "./components/HomeComponents/AuthNavBar";
-import axios from "axios";
+import ProtectedRoute from "./context/ProtectedRoute";
+
 function App() {
-  useEffect(() => {
-    axios.get("/jhire/auth/check-session", { withCredentials: true })
-      .then(res => {
-        console.log("Auth Status:", res.data);
-        setIsAuthenticated(res.data.isAuthenticated);
-      })
-      .catch(err => console.error(err));
-  }, []);
-  
   return (
     <UserProvider>
       <Router>
-        <AuthNavbar /> {/* ✅ Navbar updates dynamically */}
+        <AuthNavbar /> {/* Navbar updates dynamically */}
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/alljobs" element={<JobListing />} />
-          <Route path="/jobs/:id" element={<ViewJob />} />
-          <Route path="/filter" element={<JobFiltering />} />
           <Route path="/hr-register" element={<HRSignUp />} />
-          <Route path="/hr-dashboard" element={<HRDashboard />} />
-          <Route path="/seeker-register" element={<JobSeekerRegistration />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<JobSeekerRegistration />} />
+
+          {/* protected routes are wrapped  */}
+          <Route element={<ProtectedRoute />}>
+            <Route path="/hr-dashboard" element={<HRDashboard />} />
+            <Route path="/filter" element={<JobFiltering />} />
+            <Route path="/jobs/:id" element={<ViewJob />} />
+
+          </Route>
         </Routes>
       </Router>
     </UserProvider>

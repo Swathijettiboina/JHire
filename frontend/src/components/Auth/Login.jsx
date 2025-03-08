@@ -8,7 +8,7 @@ const Login = () => {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const navigate = useNavigate();
-  const { setUser } = useUser(); // ✅ Get setUser from context
+  const { setUser } = useUser(); 
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -19,12 +19,12 @@ const Login = () => {
 
       console.log("Login Response:", response.data);
       const user = response.data.user;
-      setUser(user); // ✅ Update global user state
+      setUser(user);
 
       if (user.userType === "hr") {
-        navigate("/hr-dashboard");
+        navigate("/");
       } else {
-        navigate("/seeker-dashboard");
+        navigate("/");
       }
     } catch (err) {
       console.error("Login Error:", err.response?.data);

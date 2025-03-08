@@ -4,6 +4,8 @@ const supabase = require("../config/connectDb");
 require("dotenv").config();
 
 const SECRET_KEY = process.env.JWT_SECRET_KEY;
+
+// Login Function
 const loginUser = async (req, res) => {
   console.log("Login request received:", req.body);
 
@@ -47,51 +49,58 @@ const loginUser = async (req, res) => {
       id: user.seeker_id || user.hr_id,
       email: user.email,
       userType: userType,
-      first_name: user.first_name, // Add first name for frontend display
+      first_name: user.first_name,
     };
 
     const token = jwt.sign(payload, SECRET_KEY, { expiresIn: "1h" });
 
-    // Store token in HTTP-only cookie
+    // Fix: Secure cookies work only in real production
+    const isProduction = process.env.NODE_ENV === "production" && req.hostname !== "localhost";
+
     res.cookie("token", token, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === "production", // ✅ Only secure in production
+      secure: isProduction, 
       sameSite: "Lax",
     });
 
+    console.log("Login Successful:", payload);
     return res.json({ user: payload });
   } catch (error) {
     console.error("Login Error:", error.message);
     return res.status(500).json({ message: "Server error" });
   }
 };
+
+// Check Session Function
 const checkSession = (req, res) => {
   try {
-    console.log("Cookies Received:", req.cookies); // ✅ Debugging log
+    console.log("🔹 Cookies Received:", req.cookies); // Debugging log
 
-    const token = req.cookies?.token; // ✅ Ensure cookies exist
+    const token = req.cookies?.token; // Ensure cookies exist
 
     if (!token) {
       return res.status(401).json({ message: "No session found" });
     }
 
-    jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
+    jwt.verify(token, SECRET_KEY, (err, decoded) => {
       if (err) {
         return res.status(403).json({ message: "Invalid session" });
       }
 
-      res.json({ user: decoded });
+      console.log("Session Verified:", decoded);
+      res.json({ user: decoded, isAuthenticated: true });
     });
   } catch (error) {
     console.error("Check session error:", error);
-    res.status(500).json({ message: "Server error", error });
+    res.status(500).json({ message: "Server error" });
   }
 };
 
-// LOGOUT USER
+// Logout Function
 const logoutUser = (req, res) => {
-  res.clearCookie("token"); // Clear authentication cookie
-  return res.json({ message: "Logged out successfully" });
+  res.clearCookie("token", { httpOnly: true, sameSite: "Lax", secure: false });
+  console.log("User logged out");
+  return res.json({ isAuthenticated: false, message: "Logged out successfully" });
 };
 
 module.exports = { loginUser, checkSession, logoutUser };

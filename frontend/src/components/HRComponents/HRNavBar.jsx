@@ -19,7 +19,6 @@ const HRNavbar = () => {
 
       <div className="hidden md:flex space-x-6 text-gray-700">
         <Link to="/alljobs" className="hover:text-blue-600">Jobs</Link>
-        {/* <a href="#" className="hover:text-blue-600">Jobs</a> */}
         <Link to="/companies" className="hover:text-blue-600">Companies</Link>
         <Link to="/about" className="hover:text-blue-600">Services</Link>
       </div>
