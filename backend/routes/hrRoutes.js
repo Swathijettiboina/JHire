@@ -1,7 +1,7 @@
 const express = require('express');
 //const multer = require('multer');
 //const upload = multer({ storage: multer.memoryStorage() }); // In-memory file storage for image uploads
-const {  getAllHrs, getHrById, getJobsByHrId, registerHR, registerCompany, checkCompanyByDomain } = require('../controllers/hrController');
+const {  getAllHrs, getHrById, getJobsByHrId, registerHR, registerCompany, checkCompanyByDomain,getJobById } = require('../controllers/hrController');
 const { updateHrProfile } = require('../controllers/updateHRprofile');
 const router = express.Router();
 

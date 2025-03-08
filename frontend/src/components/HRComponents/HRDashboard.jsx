@@ -9,6 +9,8 @@ import {
   FaEdit,
   FaBars,
   FaTimes,
+  FaMoon,
+  FaSun,
 } from "react-icons/fa";
 import HRProfile from "./HRProfile";
 import PostJobForm from "../JobComponents/PostJobForm";
@@ -22,6 +24,7 @@ const HRDashboard = () => {
   const [activeTab, setActiveTab] = useState("profile");
   const [profile, setProfile] = useState(null);
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [darkMode, setDarkMode] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -49,22 +52,22 @@ const HRDashboard = () => {
   };
 
   return (
-    <div className="flex flex-col md:flex-row min-h-screen bg-gray-100">
-      {/* Mobile Menu Button */}
-      <button
-        className="md:hidden p-4 text-blue-600 focus:outline-none"
-        onClick={() => setSidebarOpen(!sidebarOpen)}
-      >
-        {sidebarOpen ? <FaTimes size={24} /> : <FaBars size={24} />}
-      </button>
+    <div className={`flex flex-col md:flex-row min-h-screen transition-all ${darkMode ? "bg-gray-900 text-white" : "bg-gray-100 text-black"}`}>
+      <div className="flex justify-between p-4 md:hidden">
+        <button onClick={() => setSidebarOpen(!sidebarOpen)}>
+          {sidebarOpen ? <FaTimes size={24} className="text-green-600" /> : <FaBars size={24} className="text-green-600" />}
+        </button>
+        <button onClick={() => setDarkMode(!darkMode)}>
+          {darkMode ? <FaSun size={24} className="text-yellow-400" /> : <FaMoon size={24} className="text-gray-400" />}
+        </button>
+      </div>
 
-      {/* Sidebar */}
       <div
-        className={`fixed inset-y-0 left-0 w-64 bg-blue-600 text-white shadow-lg p-6 transition-transform transform ${
+        className={`fixed inset-y-0 left-0 w-64 ${darkMode ? "bg-green-900" : "bg-green-700"} text-white shadow-lg p-6 transition-transform transform ${
           sidebarOpen ? "translate-x-0" : "-translate-x-full"
         } md:relative md:translate-x-0`}
       >
-        <h2 className="text-2xl font-bold mb-6">Dashboard</h2>
+        <h2 className="text-2xl font-bold mb-6 text-center">Dashboard</h2>
         <img
           src="profilelogo.jpg"
           alt="HR Profile"
@@ -72,34 +75,40 @@ const HRDashboard = () => {
         />
         <ul className="mt-6 text-center">
           <li
-            className="mb-4 flex items-center justify-center gap-3 text-lg font-semibold hover:text-gray-300 cursor-pointer"
+            className="mb-4 flex items-center justify-center gap-3 text-lg font-semibold hover:bg-green-800 py-2 px-4 rounded-lg cursor-pointer"
             onClick={() => setActiveTab("profile")}
           >
             <FaUser /> My Profile
           </li>
           <li
-            className="mb-4 flex items-center justify-center gap-3 text-lg font-semibold hover:text-gray-300 cursor-pointer"
+            className="mb-4 flex items-center justify-center gap-3 text-lg font-semibold hover:bg-green-800 py-2 px-4 rounded-lg cursor-pointer"
             onClick={() => setActiveTab("edit-profile")}
           >
             <FaEdit /> Update Profile
           </li>
           <li
-            className="mb-4 flex items-center justify-center gap-3 text-lg font-semibold hover:text-gray-300 cursor-pointer"
+            className="mb-4 flex items-center justify-center gap-3 text-lg font-semibold hover:bg-green-800 py-2 px-4 rounded-lg cursor-pointer"
             onClick={() => setActiveTab("jobs")}
           >
             <FaBriefcase /> My Jobs
           </li>
           <li
-            className="mb-4 flex items-center justify-center gap-3 text-lg font-semibold hover:text-gray-300 cursor-pointer"
+            className="mb-4 flex items-center justify-center gap-3 text-lg font-semibold hover:bg-green-800 py-2 px-4 rounded-lg cursor-pointer"
             onClick={() => setActiveTab("post-job")}
           >
             <FaPlus /> Post a Job
           </li>
         </ul>
+        <button
+          onClick={() => setDarkMode(!darkMode)}
+          className="w-full mt-6 py-2 px-4 text-lg font-semibold rounded-lg flex items-center justify-center gap-3 bg-gray-700 hover:bg-gray-800"
+        >
+          {darkMode ? <FaSun className="text-yellow-400" /> : <FaMoon className="text-gray-400" />} {darkMode ? "Light Mode" : "Dark Mode"}
+        </button>
       </div>
 
       {/* Main Content */}
-      <div className="flex-1 p-5">{renderContent()}</div>
+      <div className="flex-1 p-5 transition-all">{renderContent()}</div>
     </div>
   );
 };

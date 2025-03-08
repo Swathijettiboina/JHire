@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 const SeekerCard = ({ seeker }) => {
   return (
@@ -27,16 +28,13 @@ const SeekerCard = ({ seeker }) => {
         </div>
       </div>
       
-      {/* Profile Link */}
+      {/* Profile Link Button */}
       <div>
-        <a
-          href={seeker.seeker_linkedin_profile || "#"}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="bg-green-600 text-white px-4 py-2 rounded-lg text-sm hover:bg-green-700 transition"
-        >
-          View Profile
-        </a>
+      <Link to={`/seeker/${seeker.seeker_id}`} state={{ seeker }}>
+  <button className="bg-green-600 text-white px-4 py-2 rounded-lg text-sm hover:bg-green-700 transition">
+    View Profile
+  </button>
+</Link>
       </div>
     </div>
   );

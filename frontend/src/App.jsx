@@ -15,6 +15,8 @@ import About from "./components/Pages/About";
 import Services from "./components/Pages/Services";
 import ViewJobAlongWIthApplicants from "./components/JobComponents/ViewJobAlongWIthApplicants";
 import SeekerListing from "./components/JobSeeker/SeekerListing";
+import ViewSeekerDetails from "./components/JobSeeker/ViewSeekerDetails";
+import Info from "./components/Pages/Info";
 
 
 function App() {
@@ -31,6 +33,7 @@ function App() {
           <Route path="/about" element={<About/>} />
           <Route path="/services" element={<Services/>} />
           <Route path="/candidates" element={<SeekerListing />} />
+          <Route path="/info" element={<Info />} />
 
           {/* protected routes are wrapped  */}
           <Route element={<ProtectedRoute />}>
@@ -39,9 +42,11 @@ function App() {
             <Route path="/seeker-dashboard" element={<SeekerDashBoard />} />
             <Route path="/post-job" element={<PostJobForm />} />
             <Route path="/hr/job-details/:job_id" element={<ViewJobAlongWIthApplicants />} />
+            <Route path="/seeker/:id" element={<ViewSeekerDetails />} />
           </Route>
         </Routes>
       </Router>
+      <About />
     </UserProvider>
   );
 }
