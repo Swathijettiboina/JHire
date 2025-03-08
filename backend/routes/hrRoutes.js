@@ -1,7 +1,7 @@
 const express = require('express');
 const multer = require('multer');
 const upload = multer({ storage: multer.memoryStorage() }); // In-memory file storage for image uploads
-const {  getAllHrs, getHrById, getJobsByHrId, registerHR, registerCompany, checkCompanyByDomain } = require('../controllers/hrController');
+const { getJobById, getAllHrs, getHrById, getJobsByHrId, registerHR, registerCompany, checkCompanyByDomain } = require('../controllers/hrController');
 const { updateHrProfile } = require('../controllers/updateHRprofile');
 const router = express.Router();
 
@@ -11,6 +11,7 @@ router.get('/', getAllHrs);
 // Route to get jobs posted by a specific HR by HR ID
 router.get('/posted-jobs/:id', getJobsByHrId);
 
+router.get('/job-details/:id', getJobById);
 // Route to get HR details by ID
 router.get('/:id', getHrById);
 

@@ -167,5 +167,51 @@ const checkCompanyByDomain = async (req, res) => {
     }
 };
 
+const getJobById = async (req, res) => {
+    try {
+        const { id } = req.params;
 
-module.exports = { checkCompanyByDomain, getAllHrs, getHrById, getJobsByHrId, registerHR, registerCompany };
+        // Fetch job details
+        const { data: jobData, error: jobError } = await supabase
+            .from("jobs_table")
+            .select("*")
+            .eq("job_id", id)
+            .single();
+
+        if (jobError) throw jobError;
+        if (!jobData) return res.status(404).json({ message: "Job not found" });
+
+        // Fetch applied candidates for the job
+        const { data: applicants, error: applicantError } = await supabase
+            .from("applied_jobs")
+            .select(`
+                application_id,
+                applied_at,
+                application_status,
+                seeker_skills,
+                seeker_resume,
+                seeker_table (
+                    seeker_id,
+                    first_name,
+                    last_name,
+                    email,
+                    phone_number,
+                    skills
+                )
+            `)
+            .eq("job_id", id);
+
+        if (applicantError) throw applicantError;
+
+        // Return job details along with applied candidates
+        res.status(200).json({
+            job: jobData,
+            applied_candidates: applicants || [],
+        });
+    } catch (error) {
+        res.status(500).json({ error: "Internal server error", details: error.message });
+    }
+};
+
+
+module.exports = { checkCompanyByDomain, getAllHrs, getHrById, getJobsByHrId, registerHR, registerCompany ,getJobById};

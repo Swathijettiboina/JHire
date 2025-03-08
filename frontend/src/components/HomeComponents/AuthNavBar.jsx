@@ -41,10 +41,10 @@ const AuthNavbar = () => {
                 <Link to="/alljobs" className="mr-4">Jobs</Link> {/* Seekers Only */}
               </>
             )}
-
-            <Link to="/about" className="mr-4">About</Link>
+            <Link to='/candidates' className="mr-4">Candidates</Link>
+            {/* <Link to="/about" className="mr-4">About</Link>
             <Link to="/services" className="mr-4">Services</Link>
-            
+             */}
             <button onClick={handleLogout} className="bg-red-500 px-4 py-2 rounded">
               Logout
             </button>

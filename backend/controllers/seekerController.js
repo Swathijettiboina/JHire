@@ -10,7 +10,7 @@ const getAllSeekers = async (req, res) => {
         if (error) {
             return res.status(400).json({ error: error.message });
         }
-        res.status(200).json(data);
+        res.status(200).json({seekers:data});
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
@@ -27,7 +27,7 @@ const getSeekerById = async (req, res) => {
         if (error) {
             return res.status(400).json({ error: error.message });
         }
-        res.status(200).json(data);
+        res.status(200).json({data});
     } catch (error) {
         res.status(500).json({ error: error.message });
     }

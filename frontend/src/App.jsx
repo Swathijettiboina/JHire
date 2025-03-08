@@ -1,7 +1,6 @@
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import { UserProvider } from "./context/UserContext"; //  Context for global auth state
 import ViewJob from "./components/JobComponents/ViewJob";
-import JobFiltering from "./components/JobComponents/JobFiltering";
 import JobListing from "./components/JobComponents/JobListing";
 import HRSignUp from "./components/Auth/HRSignUp";
 import JobSeekerRegistration from "./components/JobSeeker/JobSeekerRegistration";
@@ -14,6 +13,8 @@ import PostJobForm from "./components/JobComponents/PostJobForm";
 import SeekerDashBoard from "./components/JobSeeker/SeekerDashBoard";
 import About from "./components/Pages/About";
 import Services from "./components/Pages/Services";
+import ViewJobAlongWIthApplicants from "./components/JobComponents/ViewJobAlongWIthApplicants";
+import SeekerListing from "./components/JobSeeker/SeekerListing";
 
 function App() {
   return (
@@ -28,6 +29,7 @@ function App() {
           <Route path="/register" element={<JobSeekerRegistration />} />
           <Route path="/about" element={<About/>} />
           <Route path="/services" element={<Services/>} />
+          <Route path="/candidates" element={<SeekerListing />} />
 
           {/* protected routes are wrapped  */}
           <Route element={<ProtectedRoute />}>
@@ -35,6 +37,7 @@ function App() {
             <Route path="/hr-dashboard" element={<HRDashboard />} />
             <Route path="/seeker-dashboard" element={<SeekerDashBoard />} />
             <Route path="/post-job" element={<PostJobForm />} />
+            <Route path="/hr/job-details/:job_id" element={<ViewJobAlongWIthApplicants />} />
           </Route>
         </Routes>
       </Router>
