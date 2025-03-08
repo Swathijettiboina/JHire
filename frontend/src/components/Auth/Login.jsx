@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useUser } from "../../context/UserContext";
 import api from "../../api/axiosInstance";
 
 const Login = () => {
@@ -7,19 +8,23 @@ const Login = () => {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const navigate = useNavigate();
+  const { setUser } = useUser(); // ✅ Get setUser from context
 
   const handleLogin = async (e) => {
     e.preventDefault();
-    setError(""); // Clear previous errors
+    setError("");
 
     try {
-      const response = await api.post("/auth/login", { email, password });
-      console.log("Login Response:", response.data);
+      const response = await api.post("/auth/login", { email, password }, { withCredentials: true });
 
-      if (response.data.userType === "hr") {
-        navigate("/");
-      } else if (response.data.userType === "seeker") {
-        navigate("/");
+      console.log("Login Response:", response.data);
+      const user = response.data.user;
+      setUser(user); // ✅ Update global user state
+
+      if (user.userType === "hr") {
+        navigate("/hr-dashboard");
+      } else {
+        navigate("/seeker-dashboard");
       }
     } catch (err) {
       console.error("Login Error:", err.response?.data);

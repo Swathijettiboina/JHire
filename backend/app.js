@@ -22,7 +22,7 @@ app.use("/jhire/seeker", seekerRoutes);
 app.use("/jhire/hr", hrRoutes);
 app.use("/jhire/jobs", jobRoutes);
 app.use('/jhire/auth',authRoutes);
-app.use('/jhire/company',companyRoutes);
+app.use('/jhire/companies',companyRoutes);
 
 app.get("/", (req, res) => {
   res.send("Welcome to JHire");

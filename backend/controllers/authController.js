@@ -4,8 +4,9 @@ const supabase = require("../config/connectDb");
 require("dotenv").config();
 
 const SECRET_KEY = process.env.JWT_SECRET_KEY;
-
 const loginUser = async (req, res) => {
+  console.log("Login request received:", req.body);
+
   const { email, password } = req.body;
 
   try {
@@ -20,7 +21,8 @@ const loginUser = async (req, res) => {
         .select("*")
         .eq("email", email)
         .single();
-      if (error) throw error;
+
+      if (error || !data) return res.status(401).json({ message: "Invalid email or password" });
       user = data;
     } else {
       userType = "hr";
@@ -29,12 +31,9 @@ const loginUser = async (req, res) => {
         .select("*")
         .eq("email", email)
         .single();
-      if (error) throw error;
-      user = data;
-    }
 
-    if (!user) {
-      return res.status(401).json({ message: "Invalid email or password" });
+      if (error || !data) return res.status(401).json({ message: "Invalid email or password" });
+      user = data;
     }
 
     // Verify password
@@ -48,18 +47,51 @@ const loginUser = async (req, res) => {
       id: user.seeker_id || user.hr_id,
       email: user.email,
       userType: userType,
+      first_name: user.first_name, // Add first name for frontend display
     };
 
     const token = jwt.sign(payload, SECRET_KEY, { expiresIn: "1h" });
 
     // Store token in HTTP-only cookie
-    res.cookie("token", token, { httpOnly: true, secure: true, sameSite: "Strict" });
+    res.cookie("token", token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production", // ✅ Only secure in production
+      sameSite: "Lax",
+    });
 
-    return res.json({ userType });
+    return res.json({ user: payload });
   } catch (error) {
     console.error("Login Error:", error.message);
     return res.status(500).json({ message: "Server error" });
   }
 };
+const checkSession = (req, res) => {
+  try {
+    console.log("Cookies Received:", req.cookies); // ✅ Debugging log
 
-module.exports = { loginUser };
+    const token = req.cookies?.token; // ✅ Ensure cookies exist
+
+    if (!token) {
+      return res.status(401).json({ message: "No session found" });
+    }
+
+    jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
+      if (err) {
+        return res.status(403).json({ message: "Invalid session" });
+      }
+
+      res.json({ user: decoded });
+    });
+  } catch (error) {
+    console.error("Check session error:", error);
+    res.status(500).json({ message: "Server error", error });
+  }
+};
+
+// LOGOUT USER
+const logoutUser = (req, res) => {
+  res.clearCookie("token"); // Clear authentication cookie
+  return res.json({ message: "Logged out successfully" });
+};
+
+module.exports = { loginUser, checkSession, logoutUser };

@@ -1,13 +1,30 @@
 const jwt = require("jsonwebtoken");
-const SECRET_KEY = "your_secret_key";
+require("dotenv").config();
+const SECRET_KEY = process.env.JWT_SECRET_KEY;
 
+// const authenticateUser = (req, res, next) => {
+//   const token = req.cookies.token;
+//   if (!token) {
+//     return res.status(401).json({ message: "Unauthorized" });
+//   }
+
+//   jwt.verify(token, SECRET_KEY, (err, decoded) => {
+//     if (err) {
+//       return res.status(401).json({ message: "Invalid token" });
+//     }
+//     req.user = decoded;
+//     next();
+//   });
+// };
 const authenticateUser = (req, res, next) => {
+  console.log("Cookies Received:", req.cookies); // ✅ Debugging
   const token = req.cookies.token;
+
   if (!token) {
     return res.status(401).json({ message: "Unauthorized" });
   }
 
-  jwt.verify(token, SECRET_KEY, (err, decoded) => {
+  jwt.verify(token, process.env.JWT_SECRET_KEY, (err, decoded) => {
     if (err) {
       return res.status(401).json({ message: "Invalid token" });
     }
@@ -16,4 +33,4 @@ const authenticateUser = (req, res, next) => {
   });
 };
 
-module.exports = authenticateUser;
+module.exports = {authenticateUser};

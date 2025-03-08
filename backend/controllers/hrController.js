@@ -141,7 +141,7 @@ const getJobsByHrId = async (req, res) => {
             .eq('hr_id', id);
 
         if (error) throw error;
-        res.status(200).json(data);
+        res.status(200).json({jobs: data});
     } catch (error) {
         res.status(500).json({ error: "Internal server error", details: error.message });
     }

@@ -1,18 +1,12 @@
 import React from "react";
 import Navbar from "./Navbar";
-
 const Home = () => {
   return (
     <>
-    <Navbar/>
-    
     <div className="flex flex-col md:flex-row items-center justify-between px-8 py-12 bg-white-100 min-h-screen">
-      {/* Left Side - Image */}
       <div className="md:w-1/2 flex justify-center">
         <img src="homebg.jpg" />
       </div>
-
-      {/* Right Side - Caption and Search Bar */}
       <div className="md:w-1/2 flex flex-col items-start space-y-6 mt-8 md:mt-0">
         <h1 className="text-4xl font-bold text-gray-800">
         Your Dream Job  <span className="text-blue-600">Dream Job</span> is Just a Click Away
@@ -20,8 +14,6 @@ const Home = () => {
         <p className="text-gray-600 text-lg">
           Explore thousands of job opportunities and take the next step in your career.
         </p>
-        
-        {/* Search Bar */}
         <div className="w-full flex bg-white shadow-md rounded-full overflow-hidden">
           <input 
             type="text" 

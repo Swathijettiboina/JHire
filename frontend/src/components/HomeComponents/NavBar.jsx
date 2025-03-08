@@ -40,7 +40,7 @@ const Navbar = () => {
           {isEmployerMenuOpen && (
             <div className="absolute right-0 mt-2 w-40 bg-white border border-gray-200 shadow-md rounded-md py-2">
               <a href="#" className="block px-4 py-2 text-gray-700 hover:bg-gray-100">Post a Job</a>
-              <a href="#" className="block px-4 py-2 text-gray-700 hover:bg-gray-100">Employer Login</a>
+              <Link to="/hr-register" className="block px-4 py-2 text-gray-700 hover:bg-gray-100">Employer Register</Link>
             </div>
           )}
         </div>
