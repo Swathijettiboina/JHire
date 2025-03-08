@@ -1,12 +1,11 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import { FaUser, FaBriefcase, FaPlus, FaSignOutAlt, FaBars, FaTimes } from "react-icons/fa";
-import JobListing from "../JobComponents/JobListing";
+import { FaUser, FaBriefcase, FaPlus, FaSignOutAlt, FaBars, FaTimes, FaCloudUploadAlt, FaEdit } from "react-icons/fa";
 import HRProfile from "./HRProfile";
 import PostJobForm from "../JobComponents/PostJobForm";
 import JobsPostedByHR from "../JobComponents/JobsPostedByHR";
-
+import HRProfileUpdate from "./HRProfileUpdate";
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:5000/jhire";
 
 const HRDashboard = () => {
@@ -26,6 +25,8 @@ const HRDashboard = () => {
     switch (activeTab) {
       case "profile":
         return <HRProfile />;
+        case "edit-profile":
+          return <HRProfileUpdate />;
       case "jobs":
         return <JobsPostedByHR />;
       case "post-job":
@@ -56,6 +57,9 @@ const HRDashboard = () => {
         <ul className="mt-6 text-center">
           <li className="mb-4 flex items-center justify-center gap-3 text-lg font-semibold hover:text-gray-300 cursor-pointer" onClick={() => setActiveTab("profile")}>
             <FaUser /> My Profile
+          </li>
+          <li className="mb-4 flex items-center justify-center gap-3 text-lg font-semibold hover:text-gray-300 cursor-pointer" onClick={() => setActiveTab("edit-profile")}>
+            <FaEdit /> Update Profile
           </li>
           <li className="mb-4 flex items-center justify-center gap-3 text-lg font-semibold hover:text-gray-300 cursor-pointer" onClick={() => setActiveTab("jobs")}>
             <FaBriefcase /> My Jobs

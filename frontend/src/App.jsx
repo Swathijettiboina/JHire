@@ -10,6 +10,10 @@ import Login from "./components/Auth/Login";
 import HRDashboard from "./components/HRComponents/HRDashboard";
 import AuthNavbar from "./components/HomeComponents/AuthNavBar";
 import ProtectedRoute from "./context/ProtectedRoute";
+import PostJobForm from "./components/JobComponents/PostJobForm";
+import SeekerDashBoard from "./components/JobSeeker/SeekerDashBoard";
+import About from "./components/Pages/About";
+import Services from "./components/Pages/Services";
 
 function App() {
   return (
@@ -22,13 +26,15 @@ function App() {
           <Route path="/hr-register" element={<HRSignUp />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<JobSeekerRegistration />} />
+          <Route path="/about" element={<About/>} />
+          <Route path="/services" element={<Services/>} />
 
           {/* protected routes are wrapped  */}
           <Route element={<ProtectedRoute />}>
-            <Route path="/hr-dashboard" element={<HRDashboard />} />
-            <Route path="/filter" element={<JobFiltering />} />
             <Route path="/jobs/:id" element={<ViewJob />} />
-
+            <Route path="/hr-dashboard" element={<HRDashboard />} />
+            <Route path="/seeker-dashboard" element={<SeekerDashBoard />} />
+            <Route path="/post-job" element={<PostJobForm />} />
           </Route>
         </Routes>
       </Router>

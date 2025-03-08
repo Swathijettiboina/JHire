@@ -25,16 +25,6 @@ const HRProfile = () => {
   return (
     <div className="min-h-screen bg-gray-100 p-10 flex justify-center">
       <div className="w-full max-w-4xl bg-white p-8 rounded-lg shadow-lg">
-        {/* Header Section */}
-        <div className="flex justify-between items-center border-b pb-4">
-          <h1 className="text-2xl font-bold text-blue-600">HR Profile</h1>
-          <button
-            onClick={() => navigate("/hr-profile-update")}
-            className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600"
-          >
-            Update Profile
-          </button>
-        </div>
 
         {/* Profile Info */}
         <div className="flex items-center gap-6 mt-6">
