@@ -15,6 +15,7 @@ import SeekerDashBoard from "./components/JobSeeker/SeekerDashBoard";
 import About from "./components/Pages/About";
 import Services from "./components/Pages/Services";
 
+
 function App() {
   return (
     <UserProvider>
