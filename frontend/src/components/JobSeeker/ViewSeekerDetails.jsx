@@ -1,62 +1,111 @@
-import { useLocation, useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { useParams, useNavigate } from "react-router-dom";
+import axios from "axios";
+import { FaGraduationCap, FaBriefcase, FaMapMarkerAlt, FaEnvelope, FaPhone, FaLinkedin } from "react-icons/fa";
+
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:5000/jhire";
 
 const ViewSeekerDetails = () => {
-  const location = useLocation();
+  const { seeker_id } = useParams();
   const navigate = useNavigate();
-  const seeker = location.state?.seeker;
+  const [seeker, setSeeker] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  if (!seeker) {
-    return (
-      <div className="flex flex-col items-center justify-center min-h-screen">
-        <p className="text-red-500 text-lg">No seeker details found.</p>
-        <button onClick={() => navigate(-1)} className="mt-4 px-4 py-2 bg-blue-600 text-white rounded-lg shadow">
-          Go Back
-        </button>
-      </div>
-    );
-  }
+  useEffect(() => {
+    const fetchSeekerDetails = async () => {
+      try {
+        const response = await axios.get(`${API_BASE_URL}/seeker/${seeker_id}`, { withCredentials: true });
+        if (response.data && response.data.data.length > 0) {
+          setSeeker(response.data.data[0]);
+        } else {
+          setError("Seeker details not found.");
+        }
+      } catch (err) {
+        console.error("Error fetching seeker details:", err);
+        setError("Failed to load seeker details.");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchSeekerDetails();
+  }, [seeker_id]);
+
+  if (loading) return <div className="text-center text-gray-500 mt-10">Loading seeker details...</div>;
+
+  if (error) return (
+    <div className="flex flex-col items-center text-red-500 mt-10">
+      <p>{error}</p>
+      <button onClick={() => navigate(-1)} className="mt-4 px-4 py-2 bg-green-600 text-white rounded-lg shadow hover:bg-green-700 transition">
+        Go Back
+      </button>
+    </div>
+  );
 
   return (
-    <div className="max-w-4xl mx-auto p-6 bg-white shadow-lg rounded-lg mt-10">
-      <div className="flex items-center space-x-4 mb-6">
-        <div className="w-16 h-16 bg-gray-300 rounded-full flex items-center justify-center text-xl font-bold text-gray-700">
-          {seeker.first_name[0].toUpperCase()}
-          {/* <img src={seeker.profile_url} alt="profile" /> */}
+    <div className="max-w-6xl mx-auto p-8 mt-10 text-gray-800 bg-white shadow-lg rounded-lg">
+      <div className="flex flex-col md:flex-row md:items-center md:justify-between border-b pb-6">
+        <div className="flex items-center space-x-6">
+          <img
+            src={seeker.profile_url || `https://ui-avatars.com/api/?name=${seeker.first_name}`}
+            alt="Profile"
+            className="w-28 h-28 rounded-full object-cover border-2 border-green-500"
+          />
+          <div>
+            <h1 className="text-3xl font-semibold text-green-700">{seeker.first_name} {seeker.last_name}</h1>
+            <p className="text-lg text-gray-500">{seeker.email}</p>
+          </div>
         </div>
-        <div>
-          <h2 className="text-3xl font-semibold">{seeker.first_name} {seeker.last_name}</h2>
-          <p className="text-gray-500">{seeker.email}</p>
-        </div>
-      </div>
-
-      <div className="grid grid-cols-2 gap-4 text-gray-700">
-        <div><strong>Phone:</strong> {seeker.phone_number || "N/A"}</div>
-        <div><strong>Age:</strong> {seeker.age || "N/A"}</div>
-        <div><strong>Gender:</strong> {seeker.gender || "N/A"}</div>
-        <div><strong>City:</strong> {seeker.city_name || "N/A"}, {seeker.country_name || "N/A"}</div>
-        <div><strong>University:</strong> {seeker.university_name || "N/A"}</div>
-        <div><strong>College:</strong> {seeker.college_name || "N/A"}</div>
-        <div><strong>Specialization:</strong> {seeker.specialization || "N/A"}</div>
-        <div><strong>Degree:</strong> {seeker.degree_name || "N/A"}</div>
-        <div><strong>Passing Year:</strong> {seeker.passing_year || "N/A"}</div>
-        <div><strong>Experience:</strong> {seeker.years_of_experience ? `${seeker.years_of_experience} years` : "N/A"}</div>
-        <div><strong>Previous Company:</strong> {seeker.previous_company || "N/A"}</div>
-        <div><strong>Previous Role:</strong> {seeker.previous_job_role || "N/A"}</div>
-        <div><strong>Skills:</strong> {seeker.skills?.join(", ") || "N/A"}</div>
-        <div>
-          <strong>LinkedIn:</strong> {seeker.seeker_linkedin_profile ? (
-            <a href={seeker.seeker_linkedin_profile} target="_blank" className="text-blue-600 hover:underline">Profile</a>
-          ) : "N/A"}
-        </div>
-        <div>
-          <strong>Resume:</strong> {seeker.resume ? (
-            <a href={seeker.resume} target="_blank" className="text-blue-600 hover:underline">Download</a>
-          ) : "N/A"}
+        <div className="mt-4 md:mt-0 flex space-x-3">
+          <button className="px-4 py-2 bg-green-600 text-white rounded-lg shadow hover:bg-green-700 transition">Shortlist</button>
+          <a href={seeker.resume} target="_blank" rel="noopener noreferrer" className="px-4 py-2 bg-blue-600 text-white rounded-lg shadow hover:bg-blue-700 transition">Download CV</a>
         </div>
       </div>
 
-      <div className="mt-6 flex justify-center">
-        <button onClick={() => navigate(-1)} className="px-4 py-2 bg-blue-600 text-white rounded-lg shadow">
+      <div className="mt-6 grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div className="md:col-span-2 space-y-6">
+          <div>
+            <h2 className="text-xl font-semibold text-green-600">About Candidate</h2>
+            <p className="text-gray-700 mt-2">{seeker.about_me}</p>
+          </div>
+          <div>
+            <h2 className="text-xl font-semibold text-green-600">Education</h2>
+            <p><FaGraduationCap className="inline text-green-500 mr-2" /><strong>{seeker.university_name}</strong> ({seeker.passing_year})</p>
+            <p className="text-gray-600">{seeker.degree_name} in {seeker.specialization}</p>
+          </div>
+          <div>
+            <h2 className="text-xl font-semibold text-green-600">Experience</h2>
+            <p><FaBriefcase className="inline text-green-500 mr-2" /><strong>{seeker.previous_company}</strong> - {seeker.previous_job_role}</p>
+            <p className="text-gray-600">{seeker.years_of_experience} years</p>
+          </div>
+          <div>
+            <h2 className="text-xl font-semibold text-green-600">Skills</h2>
+            <div className="flex flex-wrap gap-2 mt-2">
+              {seeker.skills.map(skill => (
+                <span key={skill} className="bg-gray-200 text-gray-800 px-3 py-1 rounded-full text-sm">{skill}</span>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        <div className="bg-gray-100 p-6 rounded-lg shadow">
+          <h2 className="text-xl font-semibold text-green-600">Job Overview</h2>
+          <p><FaGraduationCap className="inline text-green-500 mr-2" /><strong>Qualification:</strong> {seeker.degree_name}</p>
+          <p><FaBriefcase className="inline text-green-500 mr-2" /><strong>Experience:</strong> {seeker.years_of_experience} Years</p>
+          <p><FaMapMarkerAlt className="inline text-green-500 mr-2" /><strong>Location:</strong> {seeker.city_name}, {seeker.country_name}</p>
+
+          <h2 className="text-xl font-semibold text-green-600 mt-6">Contact</h2>
+          <p><FaEnvelope className="inline text-green-500 mr-2" /><strong>Email:</strong> {seeker.email}</p>
+          <p><FaPhone className="inline text-green-500 mr-2" /><strong>Phone:</strong> {seeker.phone_number}</p>
+          <a href={seeker.seeker_linkedin_profile} target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:underline block mt-2">
+            <FaLinkedin className="inline text-blue-500 mr-2" />LinkedIn Profile
+          </a>
+        </div>
+      </div>
+
+      <div className="mt-8 flex justify-center">
+        <button onClick={() => navigate(-1)} className="px-5 py-3 bg-gray-600 text-white rounded-full shadow-lg hover:bg-gray-700 transition">
           Go Back
         </button>
       </div>

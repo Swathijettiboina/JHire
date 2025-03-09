@@ -1,11 +1,11 @@
 import { useState } from "react";
 import axios from "axios";
-
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:5000/jhire";
+import { useNavigate } from "react-router-dom";
+const API_BASE_URL = import.meta.env.API_BASE_URL || "http://localhost:5000/jhire";
 
 const ApplicantCard = ({ applicant, onStatusChange }) => {
   const [status, setStatus] = useState(applicant.application_status);
-
+  const navigate=useNavigate();
   // Handle status update
   const handleStatusUpdate = async (newStatus) => {
     try {
@@ -61,24 +61,13 @@ const ApplicantCard = ({ applicant, onStatusChange }) => {
           ))}
         </div>
 
-        {/* View Profile Button */}
-        {applicant.seeker_table.seeker_profile_url ? (
-          <a
-            href={applicant.seeker_table.seeker_profile_url}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="px-3 py-1 bg-green-500 text-white text-sm rounded-md hover:bg-green-600 transition"
-          >
-            View Full Profile
-          </a>
-        ) : (
-          <button
-            className="px-3 py-1 bg-green-500 text-white text-sm rounded-md hover:bg-green-600 transition"
-            onClick={() => window.location.href = `/seeker-profile/${applicant.seeker_table.seeker_id}`}
-          >
-            View Profile
-          </button>
-        )}
+       
+        <button
+      className="px-3 py-1 bg-green-500 text-white text-sm rounded-md hover:bg-green-600 transition"
+      onClick={() => navigate(`/seeker-profile/${applicant.seeker_table.seeker_id}`)}
+    >
+      View Profile
+    </button>
 
         {/* Applied Date */}
         <p className="text-xs text-gray-500 mt-2">Applied On: {new Date(applicant.applied_at).toLocaleDateString()}</p>

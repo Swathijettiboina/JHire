@@ -42,7 +42,7 @@ function App() {
             <Route path="/seeker-dashboard" element={<SeekerDashBoard />} />
             <Route path="/post-job" element={<PostJobForm />} />
             <Route path="/hr/job-details/:job_id" element={<ViewJobAlongWIthApplicants />} />
-            <Route path="/seeker/:id" element={<ViewSeekerDetails />} />
+            <Route path="/seeker-profile/:seeker_id" element={<ViewSeekerDetails />} />
           </Route>
         </Routes>
       </Router>

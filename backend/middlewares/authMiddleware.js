@@ -1,22 +1,24 @@
 const jwt = require("jsonwebtoken");
 require("dotenv").config();
-const SECRET_KEY = process.env.JWT_SECRET_KEY;
 
 const authenticateUser = (req, res, next) => {
-  console.log("Cookies Received in authenticateUser :", req.cookies);
-  const token = req.cookies.token;
+  console.log("Cookies received:", req.cookies); // Log cookies
 
+  const token = req.cookies?.token;
   if (!token) {
-    return res.status(401).json({ message: "Unauthorized" });
+    console.error("No token found in cookies!");
+    return res.status(401).json({ error: "Unauthorized: No token provided" });
   }
 
-  jwt.verify(token, process.env.JWT_SECRET_KEY, (err, decoded) => {
-    if (err) {
-      return res.status(401).json({ message: "Invalid token" });
-    }
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET_KEY);
+    // console.log("Decoded JWT:", decoded); // Log decoded user
     req.user = decoded;
     next();
-  });
+  } catch (error) {
+    console.error("JWT verification failed:", error.message);
+    return res.status(401).json({ error: "Unauthorized: Invalid token" });
+  }
 };
 
-module.exports = {authenticateUser};
+module.exports = authenticateUser;

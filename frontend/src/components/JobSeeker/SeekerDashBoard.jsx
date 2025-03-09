@@ -67,7 +67,7 @@ const SeekerDashboard = () => {
       >
         <h2 className="text-2xl font-bold mb-6 text-center">Seeker Dashboard</h2>
         <img
-          src="profilelogo.jpg"
+          src={user.photo_url || `https://ui-avatars.com/api/?name=${user.first_name}+${user.last_name}` }
           alt="Seeker Profile"
           className="w-28 h-28 rounded-full object-cover border-4 border-white mx-auto"
         />
