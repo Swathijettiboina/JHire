@@ -17,7 +17,7 @@ const updateSeekerProfile = async (req, res) => {
         profile_url
     } = req.body;
 
-    console.log("Received update request:", req.body); // ✅ Log incoming request data
+    console.log("Received update request:", req.body); // Log incoming request data
 
     try {
         // Check if the seeker exists

@@ -89,11 +89,11 @@ const getSavedJobs = async (req, res) => {
             .eq("seeker_id", seeker_id);
 
         if (savedJobsError) {
-            console.error("❌ Supabase Error (saved_jobs):", savedJobsError.message);
+            console.error("Supabase Error (saved_jobs):", savedJobsError.message);
             return res.status(500).json({ error: savedJobsError.message });
         }
 
-        console.log("✅ Saved Job IDs:", savedJobs);
+        console.log("Saved Job IDs:", savedJobs);
         const jobIds = savedJobs.map((job) => job.job_id);
 
         if (jobIds.length === 0) {
@@ -113,15 +113,15 @@ const getSavedJobs = async (req, res) => {
             .in("job_id", jobIds);
 
         if (jobDetailsError) {
-            console.error("❌ Supabase Error (jobs_table):", jobDetailsError.message);
+            console.error(" Supabase Error (jobs_table):", jobDetailsError.message);
             return res.status(500).json({ error: jobDetailsError.message });
         }
 
-        console.log("✅ Job Details:", jobDetails);
+        console.log("Job Details:", jobDetails);
         return res.status(200).json({ savedJobs: jobDetails });
 
     } catch (err) {
-        console.error("❌ Internal Server Error:", err);
+        console.error(" Internal Server Error:", err);
         return res.status(500).json({ error: "Internal server error" });
     }
 };

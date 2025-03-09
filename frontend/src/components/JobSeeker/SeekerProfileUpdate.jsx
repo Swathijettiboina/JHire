@@ -22,7 +22,7 @@ const SeekerProfileUpdate = () => {
     experience: "",
     skills: "", 
     linkedin_profile: "",
-    profile_url: "", // ✅ Use 'profile_url' instead of 'seeker_photo'
+    profile_url: "", //  Use 'profile_url' 
   });
 
   const [imagePreview, setImagePreview] = useState("");
@@ -37,7 +37,7 @@ const SeekerProfileUpdate = () => {
           skills: Array.isArray(response.data.skills) ? response.data.skills.join(", ") : response.data.skills || "",
           email: response.data.email || "",
         });
-        setImagePreview(response.data.profile_url || ""); // ✅ Use 'profile_url' instead of 'seeker_photo'
+        setImagePreview(response.data.profile_url || ""); // Use 'profile_url' 
       })
       .catch((error) => console.error("Error fetching seeker profile:", error));
   }, [user?.id]);
@@ -76,7 +76,7 @@ const SeekerProfileUpdate = () => {
       console.log(publicUrl);
       try {
         await axios.put(`${API_BASE_URL}/seeker/update-profile/${user.id}`, {
-          profile_url: publicUrl, // ✅ Update backend field correctly
+          profile_url: publicUrl, // Update backend field correctly
         });
         setFormData((prev) => ({ ...prev, profile_url: publicUrl }));
         setImagePreview(publicUrl);

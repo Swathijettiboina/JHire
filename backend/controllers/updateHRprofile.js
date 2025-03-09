@@ -17,13 +17,13 @@ const updateHrProfile = async (req, res) => {
         hr_linkedin_profile,
         role,
         department,
-        hr_photo // ✅ Frontend should send image URL directly
+        hr_photo // Frontend should send image URL directly
     } = req.body;
 
     console.log(req.body);
 
     try {
-        // ✅ Check if HR exists
+        //  Check if HR exists
         const { data: existingHr, error: hrError } = await supabase
             .from("hr_table")
             .select("hr_id, hr_photo")
@@ -34,10 +34,9 @@ const updateHrProfile = async (req, res) => {
             return res.status(404).json({ message: "HR not found" });
         }
 
-        // ✅ Convert `skills` to an array (ensure correct format for PostgreSQL)
         const formattedSkills = typeof skills === "string" ? skills.split(",").map(skill => skill.trim()) : skills;
 
-        // ✅ Update HR Profile
+        // Update HR Profile
         const { data: updatedHr, error: updateError } = await supabase
             .from("hr_table")
             .update({
@@ -55,7 +54,7 @@ const updateHrProfile = async (req, res) => {
                 hr_linkedin_profile,
                 role,
                 department,
-                hr_photo: hr_photo || existingHr.hr_photo // ✅ Keep old image if no new URL is provided
+                hr_photo: hr_photo || existingHr.hr_photo // Keep old image if no new URL is provided
             })
             .eq("hr_id", id)
             .select("*");
@@ -72,5 +71,4 @@ const updateHrProfile = async (req, res) => {
     }
 };
 
-// ✅ Export the function
 module.exports = { updateHrProfile };
