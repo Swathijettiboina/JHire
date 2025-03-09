@@ -109,6 +109,7 @@ const AuthNavbar = () => {
                         `https://ui-avatars.com/api/?name=${user.first_name}`
                       }
                       alt="Photo"
+                       className="h-10 w-10 rounded-full"
                     />
                   </Link>
                 )}

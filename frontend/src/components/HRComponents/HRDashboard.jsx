@@ -68,11 +68,11 @@ const HRDashboard = () => {
         } md:relative md:translate-x-0`}
       >
         <h2 className="text-2xl font-bold mb-6 text-center">HR Dashboard</h2>
-        {/* <img
-          src="profilelogo.jpg"
+        <img
+          src={user.photo_url || `https://ui-avatars.com/api/?name=${user.first_name}+${user.last_name}` }
           alt="HR Profile"
           className="w-28 h-28 rounded-full object-cover border-4 border-white mx-auto"
-        /> */}
+        />
         <ul className="mt-6 text-center">
           <li
             className="mb-4 flex items-center justify-center gap-3 text-lg font-semibold hover:bg-green-800 py-2 px-4 rounded-lg cursor-pointer"
