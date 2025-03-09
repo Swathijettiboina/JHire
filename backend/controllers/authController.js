@@ -45,15 +45,17 @@ const loginUser = async (req, res) => {
     }
 
     // Generate JWT Token
+
     const payload = {
       id: user.seeker_id || user.hr_id,
       email: user.email,
       userType: userType,
       first_name: user.first_name,
-      last_name:user.last_name,
-      photo_url:user.hr_photo||user.profile_url
+      last_name: user.last_name,
+      photo_url: user.hr_photo || user.profile_url,
+      ...(userType === "hr" && { company_id: user.company_id }), // Add company_id only for HR users
     };
-
+    
     const token = jwt.sign(payload, SECRET_KEY, { expiresIn: "1h" });
 
     // Fix: Secure cookies work only in real production
