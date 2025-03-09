@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useUser } from "../../context/UserContext";
 import api from "../../api/axiosInstance";
 import Modal from "react-modal";
+import { FaHome, FaLongArrowAltUp, FaRegistered, FaSignInAlt, FaSignOutAlt } from "react-icons/fa";
 
 const AuthNavbar = () => {
   const { user, setUser, setIsAuthenticated } = useUser();
@@ -15,16 +16,22 @@ const AuthNavbar = () => {
       await api.post("/auth/logout");
       setUser(null);
       setIsAuthenticated(false);
-      setModalMessage({ type: "success", text: "You have been logged out successfully!" });
+      setModalMessage({
+        type: "success",
+        text: "You have been logged out successfully!",
+      });
       setModalOpen(true);
-      
+
       // Redirect after a short delay
       setTimeout(() => {
         setModalOpen(false);
         navigate("/");
       }, 2000);
     } catch (error) {
-      setModalMessage({ type: "error", text: "Logout failed. Please try again!" });
+      setModalMessage({
+        type: "error",
+        text: "Logout failed. Please try again!",
+      });
       setModalOpen(true);
     }
   };
@@ -54,35 +61,93 @@ const AuthNavbar = () => {
                 <span className="text-sm font-medium">
                   Welcome, {user.first_name}!
                 </span>
-                <Link to="/" className="hover:text-green-300 transition">Home</Link>
-                <Link to="/candidates" className="hover:text-green-300 transition">Candidates</Link>
-                <Link to="/alljobs" className="hover:text-green-300 transition">Jobs</Link>
+                <Link to="/" className="hover:text-green-300 transition">
+                  Home
+                </Link>
+                <Link
+                  to="/candidates"
+                  className="hover:text-green-300 transition"
+                >
+                  Candidates
+                </Link>
+                <Link to="/alljobs" className="hover:text-green-300 transition">
+                  Jobs
+                </Link>
+                
 
                 {/* Dynamic Links Based on User Type */}
                 {user.userType === "hr" ? (
                   <>
-                    <Link to="/hr-dashboard" className="hover:text-green-300 transition">Dashboard</Link>
-                    <Link to="/post-job" className="hover:text-green-300 transition">Post Job</Link>
+                    <Link
+                      to="/post-job"
+                      className="hover:text-green-300 transition"
+                    >
+                      Post Job
+                    </Link>
+                    <Link
+                      to="/hr-dashboard"
+                      className="hover:text-green-300   transition"
+                    >
+                      <img
+                        src={
+                          user.photo_url ||
+                          `https://ui-avatars.com/api/?name=${user.first_name}`
+                        }
+                        alt="Photo"
+                        className="h-10 w-10 rounded-full"
+                      />
+                    </Link>
                   </>
                 ) : (
-                  <Link to="/seeker-dashboard" className="hover:text-green-300 transition">Dashboard</Link>
+                  <Link
+                    to="/seeker-dashboard"
+                    className="hover:text-green-300 h-10 w-10 rounded-full  transition"
+                  >
+                    <img
+                      src={
+                        user.photo_url ||
+                        `https://ui-avatars.com/api/?name=${user.first_name}`
+                      }
+                      alt="Photo"
+                    />
+                  </Link>
                 )}
-                
-                {/* Logout Button */}
+
                 <button
                   onClick={handleLogout}
                   className="bg-red-500 hover:bg-red-600 px-4 py-2 rounded-lg text-white font-medium transition"
                 >
-                  Logout
+                  <div className="flex items-center gap-2">
+                    <FaSignOutAlt />
+                    <span>Sign Out</span>
+                  </div>
                 </button>
               </>
             ) : (
               <>
-              <Link to="/" className="hover:text-green-300 transition">Home</Link>
-                <Link to="/candidates" className="hover:text-green-300 transition">Candidates</Link>
-                <Link to="/alljobs" className="hover:text-green-300 transition">Jobs</Link>
-
-                <Link to="/login" className="hover:text-green-300 transition">Login</Link>
+                <Link to="/" className="hover:text-green-300 transition">
+                  <FaHome/>
+                </Link>
+                <Link
+                  to="/candidates"
+                  className="hover:text-green-300 transition"
+                >
+                  Candidates
+                </Link>
+                <Link to="/alljobs" className="hover:text-green-300 transition">
+                  Jobs
+                </Link>
+                <Link
+                      to="/post-job"
+                      className="hover:text-green-300 transition"
+                    >
+                      Post Job
+                    </Link>
+                <Link to="/login" className="hover:text-green-300 transition">
+                <div className="flex items-center gap-2">
+                    <FaSignInAlt />
+                    <span>Login</span>
+                  </div>                </Link>
                 <Link
                   to="/register"
                   className="bg-green-500 hover:bg-green-600 px-4 py-2 rounded-lg font-medium transition"
@@ -105,7 +170,9 @@ const AuthNavbar = () => {
         <div className="flex flex-col items-center">
           <div
             className={`w-16 h-16 flex items-center justify-center rounded-full mb-4 ${
-              modalMessage.type === "success" ? "bg-green-100 text-green-600" : "bg-red-100 text-red-600"
+              modalMessage.type === "success"
+                ? "bg-green-100 text-green-600"
+                : "bg-red-100 text-red-600"
             }`}
           >
             {modalMessage.type === "success" ? "✔️" : "❌"}

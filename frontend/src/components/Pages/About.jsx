@@ -1,4 +1,5 @@
 import { FaInstagram, FaGlobe, FaWhatsapp } from "react-icons/fa";
+import { Link,  } from "react-router-dom";
 
 const About = () => {
   return (
@@ -9,12 +10,12 @@ const About = () => {
           <h2 className="text-3xl font-bold text-white">The Ultimate Job Portal</h2>
           <p className="text-gray-400">Join JHIRE and explore thousands of opportunities.</p>
           <div className="mt-4 flex justify-center space-x-4">
-            <button className="px-4 py-2 border border-green-500 text-green-400 rounded-lg hover:bg-green-600 hover:text-white">
+            <a href="/alljobs" className="px-4 py-2 border border-green-500 text-green-400 rounded-lg hover:bg-green-600 hover:text-white">
               Find a Job
-            </button>
-            <button className="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600">
+            </a>
+            <a href="/post-job" className="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600">
               Post a Job
-            </button>
+            </a>
           </div>
         </div>
 

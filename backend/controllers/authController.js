@@ -50,6 +50,8 @@ const loginUser = async (req, res) => {
       email: user.email,
       userType: userType,
       first_name: user.first_name,
+      last_name:user.last_name,
+      photo_url:user.hr_photo||user.profile_url
     };
 
     const token = jwt.sign(payload, SECRET_KEY, { expiresIn: "1h" });
