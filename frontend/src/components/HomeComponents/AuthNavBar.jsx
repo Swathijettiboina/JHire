@@ -3,13 +3,13 @@ import { Link, useNavigate } from "react-router-dom";
 import { useUser } from "../../context/UserContext";
 import api from "../../api/axiosInstance";
 import Modal from "react-modal";
-import { FaHome, FaLongArrowAltUp, FaRegistered, FaSignInAlt, FaSignOutAlt } from "react-icons/fa";
 
 const AuthNavbar = () => {
   const { user, setUser, setIsAuthenticated } = useUser();
   const navigate = useNavigate();
   const [modalOpen, setModalOpen] = useState(false);
   const [modalMessage, setModalMessage] = useState({ type: "", text: "" });
+  const [menuOpen, setMenuOpen] = useState(false);
 
   const handleLogout = async () => {
     try {
@@ -21,8 +21,6 @@ const AuthNavbar = () => {
         text: "You have been logged out successfully!",
       });
       setModalOpen(true);
-
-      // Redirect after a short delay
       setTimeout(() => {
         setModalOpen(false);
         navigate("/");
@@ -38,130 +36,136 @@ const AuthNavbar = () => {
 
   return (
     <>
-      {/* Navbar */}
-      <nav className="bg-green-700 p-4 text-white shadow-md">
+      <nav className="bg-green-700 p-4 text-white shadow-md w-full">
         <div className="container mx-auto flex justify-between items-center">
           {/* Logo */}
           <Link
             to="/"
-            className="text-2xl flex px-5 gap-5 font-bold tracking-wide hover:text-green-300 transition"
+            className="text-2xl flex items-center font-bold tracking-wide hover:text-green-300 transition"
+            style={{ fontFamily: "var(--eb_garamond-font)" }}
           >
             <img
               src="logo.avif"
               alt="Logo"
-              className="w-10 h-10 mb-4 rounded-full"
+              className="w-10 h-10 rounded-full mr-2"
             />
             <p>JHire</p>
           </Link>
 
-          {/* Navigation Links */}
-          <div className="flex items-center space-x-6">
+          {/* Navbar Links (Centered) */}
+          <div
+            className="hidden md:flex space-x-6 mx-auto"
+            style={{ fontFamily: "var(--eb_garamond-font)" }}
+          >
+            <Link to="/" className="hover:text-green-300 transition">
+              Home
+            </Link>
+            <Link to="/candidates" className="hover:text-green-300 transition">
+              Candidates
+            </Link>
+            <Link to="/alljobs" className="hover:text-green-300 transition">
+              Jobs
+            </Link>
+            <Link to="/post-job" className="hover:text-green-300 transition">
+              Post Job
+            </Link>
+          </div>
+
+          {/* Right-Side Authentication Links */}
+          <div className="hidden md:flex items-center space-x-4">
             {user ? (
               <>
                 <span className="text-sm font-medium">
                   Welcome, {user.first_name}!
                 </span>
-                <Link to="/" className="hover:text-green-300 transition">
-                  Home
-                </Link>
-                <Link
-                  to="/candidates"
-                  className="hover:text-green-300 transition"
-                >
-                  Candidates
-                </Link>
-                <Link to="/alljobs" className="hover:text-green-300 transition">
-                  Jobs
-                </Link>
-                
-
-                {/* Dynamic Links Based on User Type */}
                 {user.userType === "hr" ? (
-                  <>
-                    <Link
-                      to="/post-job"
-                      className="hover:text-green-300 transition"
-                    >
-                      Post Job
-                    </Link>
-                    <Link
-                      to="/hr-dashboard"
-                      className="hover:text-green-300   transition"
-                    >
-                      <img
-                        src={
-                          user.photo_url ||
-                          `https://ui-avatars.com/api/?name=${user.first_name}`
-                        }
-                        alt="Photo"
-                        className="h-10 w-10 rounded-full"
-                      />
-                    </Link>
-                  </>
-                ) : (
-                  <Link
-                    to="/seeker-dashboard"
-                    className="hover:text-green-300 h-10 w-10 rounded-full  transition"
-                  >
+                  <Link to="/hr-dashboard">
                     <img
                       src={
                         user.photo_url ||
                         `https://ui-avatars.com/api/?name=${user.first_name}`
                       }
-                      alt="Photo"
-                       className="h-10 w-10 rounded-full"
+                      alt="Profile"
+                      className="h-10 w-10 rounded-full"
+                    />
+                  </Link>
+                ) : (
+                  <Link to="/seeker-dashboard">
+                    <img
+                      src={
+                        user.photo_url ||
+                        `https://ui-avatars.com/api/?name=${user.first_name}`
+                      }
+                      alt="Profile"
+                      className="h-10 w-10 rounded-full"
                     />
                   </Link>
                 )}
-
                 <button
                   onClick={handleLogout}
-                  className="bg-red-500 hover:bg-red-600 px-4 py-2 rounded-lg text-white font-medium transition"
+                  className="bg-red-500 hover:bg-red-600 px-4 py-2 rounded-lg transition"
                 >
-                  <div className="flex items-center gap-2">
-                    <FaSignOutAlt />
-                    <span>Sign Out</span>
-                  </div>
+                  Sign Out
                 </button>
               </>
             ) : (
               <>
-                <Link to="/" className="hover:text-green-300 transition">
-                  <FaHome/>
-                </Link>
                 <Link
-                  to="/candidates"
-                  className="hover:text-green-300 transition"
+                  to="/login"
+                  className="text-black font-medium hover:text-gray-700 transition"
+                  style={{ fontFamily: "var(--gorditas-font)" }}
                 >
-                  Candidates
+                  Login
                 </Link>
-                <Link to="/alljobs" className="hover:text-green-300 transition">
-                  Jobs
-                </Link>
-                <Link
-                      to="/post-job"
-                      className="hover:text-green-300 transition"
-                    >
-                      Post Job
-                    </Link>
-                <Link to="/login" className="hover:text-green-300 transition">
-                <div className="flex items-center gap-2">
-                    <FaSignInAlt />
-                    <span>Login</span>
-                  </div>                </Link>
                 <Link
                   to="/register"
-                  className="bg-green-500 hover:bg-green-600 px-4 py-2 rounded-lg font-medium transition"
+                  className="bg-green-500 hover:bg-green-600 text-white px-6 py-2 rounded-full text-lg font-bold"
+                  style={{ fontFamily: "var(--gorditas-font)" }}
                 >
                   Register
                 </Link>
               </>
             )}
           </div>
+
+          {/* Mobile Menu Button */}
+          <button
+            className="md:hidden text-white"
+            onClick={() => setMenuOpen(!menuOpen)}
+          >
+            ☰
+          </button>
         </div>
+
+        {/* Mobile Menu */}
+        {menuOpen && (
+          <div className="md:hidden flex flex-col items-center space-y-4 mt-4">
+            <Link to="/" className="hover:text-green-300 transition">
+              Home
+            </Link>
+            <Link to="/candidates" className="hover:text-green-300 transition">
+              Candidates
+            </Link>
+            <Link to="/alljobs" className="hover:text-green-300 transition">
+              Jobs
+            </Link>
+            <Link to="/post-job" className="hover:text-green-300 transition">
+              Post Job
+            </Link>
+            <Link to="/login" className="hover:text-green-300 transition">
+              Login
+            </Link>
+            <Link
+              to="/register"
+              className="bg-green-500 hover:bg-green-600 px-4 py-2 rounded-lg transition"
+            >
+              Register
+            </Link>
+          </div>
+        )}
       </nav>
 
-      {/* Logout Success/Failure Pop-up */}
+      {/* Logout Modal */}
       <Modal
         isOpen={modalOpen}
         onRequestClose={() => setModalOpen(false)}
@@ -176,7 +180,7 @@ const AuthNavbar = () => {
                 : "bg-red-100 text-red-600"
             }`}
           >
-            {modalMessage.type === "success" ? "✔️" : "❌"}
+            {modalMessage.type === "success" ? "✔" : "❌"}
           </div>
           <h2 className="text-lg font-semibold mb-2">
             {modalMessage.type === "success" ? "Success" : "Logout Failed!"}

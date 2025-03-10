@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { Link, Navigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
+import ApplyJobForm from "./ApplyJobForm";
 import axios from "axios";
 import { MapPin, Briefcase, Globe, Building } from "lucide-react";
 import BackButton from "../BackButton";
@@ -11,6 +12,7 @@ const ViewJob = () => {
   const [job, setJob] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+const [isModalOpen, setIsModalOpen] = useState(false); 
 
   useEffect(() => {
     const fetchJob = async () => {
@@ -48,45 +50,91 @@ const ViewJob = () => {
   const company = job.company_table || {};
 
   return (
-    <div className="container mx-auto p-6 max-w-3xl bg-white shadow-md rounded-lg">
-      {/* Job Title */}
-      <BackButton />
-      <h1 className="text-3xl font-bold mb-4">{job.job_title}</h1>
-      <p className="text-gray-600 text-lg mb-4">{job.job_description}</p>
+    <div className="flex flex-col items-left bg-green-50 min-h-screen p-8">
+       <BackButton />
+    <div className="flex flex-col items-center bg-green-50 min-h-screen p-8">
+      <h2 className="text-green-700 text-3xl font-bold mb-6">Job Details</h2>
+      <div className="bg-white shadow-lg rounded-lg p-6 w-full max-w-3xl border border-green-500">
+        <div className="grid grid-cols-2 gap-4 mb-4">
+          <div>
+            <p className="text-gray-700 font-semibold">Job Title:</p>
+            <p className="text-gray-900">{job.job_title}</p>
+          </div>
+          <div>
+            <p className="text-gray-700 font-semibold">Role:</p>
+            <p className="text-gray-900">{job.role}</p>
+          </div>
+        </div>
+        <div className="mb-4">
+          <p className="text-gray-700 font-semibold">Job Description:</p>
+          <p className="text-gray-900">{job.job_description}</p>
+        </div>
+        <div className="grid grid-cols-2 gap-4 mb-4">
+          <div>
+            <p className="text-gray-700 font-semibold">Job Type:</p>
+            <p className="text-gray-900">{job.job_type}</p>
+          </div>
+          <div>
+            <p className="text-gray-700 font-semibold">Employment Type:</p>
+            <p className="text-gray-900">{job.employment_type}</p>
+          </div>
+        </div>
+        <div className="grid grid-cols-2 gap-4 mb-4">
+          <div>
+            <p className="text-gray-700 font-semibold">Salary:</p>
+            <p className="text-gray-900">{job.salary}</p>
+          </div>
+          <div>
+            <p className="text-gray-700 font-semibold">Vacancies:</p>
+            <p className="text-gray-900">{job.number_of_vacancies}</p>
+          </div>
+        </div>
+        <div className="grid grid-cols-2 gap-4 mb-4">
+          <div>
+            <p className="text-gray-700 font-semibold">Total Applied:</p>
+            <p className="text-gray-900">{job.total_applied}</p>
+          </div>
+          <div>
+            <p className="text-gray-700 font-semibold">Skills Required:</p>
+            <p className="text-gray-900">{job.skills?.join(", ")}</p>
+          </div>
+        </div>
 
-      {/* Job Details */}
-      <div className="space-y-2 text-lg border-b pb-4">
-        <p><strong>Role:</strong> {job.role}</p>
-        <p><strong>Job Type:</strong> {job.job_type}</p>
-        <p><strong>Salary:</strong> {job.salary}</p>
-        <p><strong>Employment Type:</strong> {job.employment_type}</p>
-        <p><strong>Vacancies</strong> {job.number_of_vacancies}</p>
-        <p><strong>Total Applied:</strong> {job.total_applied}</p>
-        <p><strong>Skills Required:</strong> {job.skills?.join(", ")}</p>
-      </div>
+        {/* Company Details */}
+        <div className="mt-6 p-4 bg-gray-100 rounded-lg">
+          <h2 className="text-2xl font-semibold mb-2">About the Company</h2>
+          <p className="text-lg font-semibold">{company.company_name}</p>
+          <p className="text-gray-600">{company.company_type}</p>
+          <div className="flex items-center mt-2 text-gray-700">
+            <Building size={16} className="mr-2" />
+            <span>{company.company_location_city}, {company.company_location_country}</span>
+          </div>
+          <div className="flex items-center mt-2 text-gray-700">
+            <MapPin size={16} className="mr-2" />
+            <span>Pin Code: {company.office_pin_code}</span>
+          </div>
+          <div className="flex items-center mt-2 text-gray-700">
+            <Globe size={16} className="mr-2" />
+            <a href={company.company_website} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">Company Website</a>
+          </div>
+          <div className="flex items-center mt-2 text-gray-700">
+            <Briefcase size={16} className="mr-2" />
+            <a href={company.company_linkedin_profile} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">LinkedIn Profile</a>
+          </div>
+        </div>
 
-      {/* Company Details */}
-      <div className="mt-6 p-4 bg-gray-100 rounded-lg">
-        <h2 className="text-2xl font-semibold mb-2">About the Company</h2>
-        <p className="text-lg font-semibold">{company.company_name}</p>
-        <p className="text-gray-600">{company.company_type}</p>
-        <div className="flex items-center mt-2 text-gray-700">
-          <Building size={16} className="mr-2" />
-          <span>{company.company_location_city}, {company.company_location_country}</span>
+        <div className="flex justify-center">
+          <button
+            onClick={() => setIsModalOpen(true)}
+            className="bg-green-600 text-white py-2 px-6 rounded hover:bg-green-700 transition"
+          >
+            Apply Job
+          </button>
         </div>
-        <div className="flex items-center mt-2 text-gray-700">
-          <MapPin size={16} className="mr-2" />
-          <span>Pin Code: {company.office_pin_code}</span>
-        </div>
-        <div className="flex items-center mt-2 text-gray-700">
-          <Globe size={16} className="mr-2" />
-          <a href={company.company_website} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">Company Website</a>
-        </div>
-        <div className="flex items-center mt-2 text-gray-700">
-          <Briefcase size={16} className="mr-2" />
-          <a href={company.company_linkedin_profile} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">LinkedIn Profile</a>
+
         </div>
       </div>
+      {isModalOpen && <ApplyJobForm onClose={() => setIsModalOpen(false)} jobId={id} />}
     </div>
   );
 };
