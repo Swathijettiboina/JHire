@@ -8,7 +8,7 @@ const SeekerListing = () => {
   const [seekers, setSeekers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
-  
+
   // Pagination state
   const [currentPage, setCurrentPage] = useState(1);
   const seekersPerPage = 6;
@@ -41,37 +41,45 @@ const SeekerListing = () => {
 
   if (loading)
     return (
-      <div className="flex justify-center items-center h-screen">
+      <div className="flex justify-center items-center h-screen bg-gray-100">
         <p className="text-lg text-gray-600 animate-pulse">Loading seekers...</p>
       </div>
     );
 
   if (error)
     return (
-      <div className="flex justify-center items-center h-screen">
+      <div className="flex justify-center items-center h-screen bg-gray-100">
         <p className="text-lg text-red-600">{error}</p>
       </div>
     );
 
   return (
-    <div className="container mx-auto p-6 max-w-2xl">
-      <h1 className="text-3xl font-bold mb-6 text-center text-gray-800">Seeker Listings</h1>
+    <div className="container mx-auto p-8 bg-gray-50 min-h-screen">
+<div className="mb-8 text-center">
+  <h1 className="text-4xl font-extrabold text-green-950">A Place To find the Profiles</h1>
+  <p className="text-lg text-green-600 mt-2">
+    Browse through our extensive list of job seekers, each bringing unique skills, experience, and expertise.  
+    Find the right talent for your company by exploring detailed profiles and connecting with top candidates.  
+  </p>
+</div>
 
       {currentSeekers.length === 0 ? (
-        <p className="text-center text-gray-500">No seekers available at the moment.</p>
+        <p className="text-center text-gray-500 text-lg">No seekers available at the moment.</p>
       ) : (
-        <div className="space-y-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
           {currentSeekers.map((seeker) => (
-            <SeekerCard key={seeker.seeker_id} seeker={seeker} />
+            <div key={seeker.seeker_id} className="transition-transform transform hover:scale-105">
+              <SeekerCard seeker={seeker} />
+            </div>
           ))}
         </div>
       )}
 
       {/* Pagination Controls */}
       {seekers.length > seekersPerPage && (
-        <div className="flex justify-center items-center mt-6 space-x-4">
+        <div className="flex justify-center items-center mt-10 space-x-4">
           <button
-            className={`px-4 py-2 border rounded-lg ${
+            className={`px-5 py-2 rounded-full font-medium transition ${
               currentPage === 1
                 ? "bg-gray-300 text-gray-600 cursor-not-allowed"
                 : "bg-blue-600 text-white hover:bg-blue-700"
@@ -82,10 +90,10 @@ const SeekerListing = () => {
             Previous
           </button>
 
-          <span className="text-gray-700">Page {currentPage} of {totalPages}</span>
+          <span className="text-lg font-semibold text-gray-700">Page {currentPage} of {totalPages}</span>
 
           <button
-            className={`px-4 py-2 border rounded-lg ${
+            className={`px-5 py-2 rounded-full font-medium transition ${
               currentPage === totalPages
                 ? "bg-gray-300 text-gray-600 cursor-not-allowed"
                 : "bg-blue-600 text-white hover:bg-blue-700"

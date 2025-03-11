@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useUser } from "../../context/UserContext";
 import axios from "axios";
-import { FaBuilding, FaMapMarkerAlt, FaBriefcase, FaRegStar, FaTrash } from "react-icons/fa";
+import { FaBuilding, FaMapMarkerAlt, FaBriefcase, FaTrash } from "react-icons/fa";
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:5000/jhire";
 
@@ -31,7 +31,7 @@ const Wishlist = () => {
       await axios.delete(`${API_BASE_URL}/seeker/wishlist/${user.id}/${jobId}`);
       setWishlist((prev) => prev.filter((job) => job.job_id !== jobId));
     } catch (err) {
-      setError("Failed to remove job from wishlist.");
+      setError("Failed to remove job from wishlist.",err.message);
     }
   };
 

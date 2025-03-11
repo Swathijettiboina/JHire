@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import api from "../../api/axiosInstance";
 import { Link } from "react-router-dom";
 import { FaUser, FaEnvelope, FaPhone, FaLock, FaEye, FaEyeSlash } from "react-icons/fa";
 import axios from "axios";
@@ -91,7 +90,7 @@ const JobSeekerRegistration = () => {
         navigate("/login");
       }, 2000);
     } catch (err) {
-      setErrors({ general: "Registration failed. Try again." });
+      setErrors({ general: "Registration failed. Try again." },err.message);
     }
   };
 

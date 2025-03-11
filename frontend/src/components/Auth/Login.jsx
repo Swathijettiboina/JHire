@@ -108,7 +108,7 @@ const Login = () => {
 
           {/* Register Link */}
           <p className="text-gray-600 text-sm mt-4 text-center">
-            Don't have an account?{" "}
+            Don&apos;t have an account?{" "}
             <span
               className="text-green-500 cursor-pointer hover:underline"
               onClick={() => navigate("/register")}

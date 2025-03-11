@@ -3,7 +3,7 @@ import axios from "axios";
 import JobCard from "./JobCard";
 import JobFiltering from "./JobFiltering";
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:5000/jhire";
+const API_BASE_URL = import.meta.env.API_BASE_URL || "http://localhost:5000/jhire";
 
 const JobListing = () => {
   const [jobs, setJobs] = useState([]);

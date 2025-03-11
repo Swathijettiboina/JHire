@@ -15,7 +15,6 @@ const loginUser = async (req, res) => {
     let user;
     let userType;
 
-    // Determine user type based on email domain
     if (email.match(/@(gmail\.com|yahoo\.com|outlook\.com)$/)) {
       userType = "seeker";
       const { data, error } = await supabase
@@ -58,7 +57,6 @@ const loginUser = async (req, res) => {
     
     const token = jwt.sign(payload, SECRET_KEY, { expiresIn: "1h" });
 
-    // Fix: Secure cookies work only in real production
     const isProduction = process.env.NODE_ENV === "production" && req.hostname !== "localhost";
 
     res.cookie("token", token, {
@@ -78,7 +76,7 @@ const loginUser = async (req, res) => {
 // Check Session Function
 const checkSession = (req, res) => {
   try {
-    console.log("🔹 Cookies Received:", req.cookies); // Debugging log
+    console.log("Cookies Received:", req.cookies); // Debugging log
 
     const token = req.cookies?.token; // Ensure cookies exist
 

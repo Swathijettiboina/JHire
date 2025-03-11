@@ -1,12 +1,11 @@
 import { useEffect, useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import axios from "axios";
 import ApplicantCard from "./ApplicantCard";
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:5000/jhire";
+const API_BASE_URL = import.meta.env.API_BASE_URL || "http://localhost:5000/jhire";
 
 const ViewJobAlongWIthApplicants = () => {
   const { job_id } = useParams();
-  const navigate = useNavigate();
   const [jobData, setJobData] = useState(null);
   const [loading, setLoading] = useState(true);
 

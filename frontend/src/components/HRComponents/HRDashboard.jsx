@@ -122,17 +122,6 @@ const HRDashboard = () => {
             <FaPlus /> Post a Job
           </li>
         </ul>
-        <button
-          onClick={() => setDarkMode(!darkMode)}
-          className="w-full mt-6 py-2 px-4 text-lg font-semibold rounded-lg flex items-center justify-center gap-3 bg-gray-700 hover:bg-gray-800"
-        >
-          {darkMode ? (
-            <FaSun className="text-yellow-400" />
-          ) : (
-            <FaMoon className="text-gray-400" />
-          )}{" "}
-          {darkMode ? "Light Mode" : "Dark Mode"}
-        </button>
       </div>
 
       {/* Main Content */}

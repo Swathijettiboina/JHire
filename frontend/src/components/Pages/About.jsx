@@ -1,5 +1,4 @@
 import { FaInstagram, FaGlobe, FaWhatsapp } from "react-icons/fa";
-import { Link,  } from "react-router-dom";
 
 const About = () => {
   return (
@@ -35,10 +34,10 @@ const About = () => {
             <h3 className="text-lg font-semibold text-white">Services</h3>
             <ul className="mt-2 space-y-2 text-gray-400">
               <li>
-                <a href="/info" className="hover:text-green-300">Find Jobs</a>
+                <a href="/alljobs" className="hover:text-green-300">Find Jobs</a>
               </li>
               <li>
-                <a href="/info" className="hover:text-green-300">Browse Companies</a>
+                <a href="/companies" className="hover:text-green-300">Browse Companies</a>
               </li>
               <li>
                 <a href="/info" className="hover:text-green-300">For Recruiters</a>

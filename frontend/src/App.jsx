@@ -12,12 +12,15 @@ import ProtectedRoute from "./context/ProtectedRoute";
 import PostJobForm from "./components/JobComponents/PostJobForm";
 import SeekerDashBoard from "./components/JobSeeker/SeekerDashBoard";
 import About from "./components/Pages/About";
-import Services from "./components/Pages/Services";
 import ViewJobAlongWIthApplicants from "./components/JobComponents/ViewJobAlongWIthApplicants";
 import SeekerListing from "./components/JobSeeker/SeekerListing";
 import ViewSeekerDetails from "./components/JobSeeker/ViewSeekerDetails";
 import Info from "./components/Pages/Info";
-import { ToastContainer } from "react-toastify";
+import ViewCompany from "./components/CompanyComponents/ViewCompany";
+import CompanyListing from "./components/companyComponents/CompanyListing";
+import ContactPage from "./components/Pages/ContactPage";
+
+
 
 
 function App() {
@@ -32,9 +35,10 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<JobSeekerRegistration />} />
           <Route path="/about" element={<About/>} />
-          <Route path="/services" element={<Services/>} />
           <Route path="/candidates" element={<SeekerListing />} />
           <Route path="/info" element={<Info />} />
+          <Route path="/companies" element={<CompanyListing />} />
+          <Route path="/contactus" element={<ContactPage/>}/>
 
           {/* protected routes are wrapped  */}
           <Route element={<ProtectedRoute />}>
@@ -44,6 +48,7 @@ function App() {
             <Route path="/post-job" element={<PostJobForm />} />
             <Route path="/hr/job-details/:job_id" element={<ViewJobAlongWIthApplicants />} />
             <Route path="/seeker-profile/:seeker_id" element={<ViewSeekerDetails />} />
+            <Route path="/companies/:companyId" element={<ViewCompany />} />
           </Route>
         </Routes>
       </Router>

@@ -29,7 +29,7 @@ const HRProfile = () => {
   return (
     <div className="min-h-screen bg-green-50 p-10 flex flex-col max-w-5xl mx-auto">
       {/* Header */}
-      <div className="flex items-center gap-6 border-b pb-4">
+      <div className="flex items-center gap-6 border-b-green-200 pb-4">
         <div className="w-30 h-30 rounded-full border-4 border-green-500 overflow-hidden">
           <img
             src={profile.hr_photo || "profilelogo.jpg"}
@@ -47,7 +47,7 @@ const HRProfile = () => {
 
       {/* About Section */}
       <div className="mt-6">
-        <h3 className="text-xl font-semibold text-green-700">About HR</h3>
+        <h3 className="text-xl font-semibold text-green-700">About Me</h3>
         <p className="text-gray-700 mt-2">{profile.about_me}</p>
       </div>
 

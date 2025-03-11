@@ -2,10 +2,8 @@ const supabase = require("../config/connectDb"); // Import Supabase client
 
 const postJob = async (req, res) => {
   try {
-    // Extract user info from JWT (handled in `authenticateUser` middleware)
     const { id: hr_id, userType, company_id } = req.user;
     console.log(req.body);
-    // Ensure only HRs can post jobs
     if (userType !== "hr") {
       return res.status(403).json({ error: "Only HRs can post jobs" });
     }
@@ -23,12 +21,10 @@ const postJob = async (req, res) => {
       job_location,
     } = req.body;
 
-    // Validate required fields
     if (!job_title || !role || !job_type || !employment_type) {
       return res.status(400).json({ error: "Missing required job fields" });
     }
 
-    // Insert job into Supabase
     const { data, error } = await supabase
       .from("jobs_table")
       .insert([
@@ -48,7 +44,6 @@ const postJob = async (req, res) => {
       ])
       .select(); // Return inserted job data
 
-    // Handle Supabase error
     if (error) {
       console.error("Error inserting job:", error.message);
       return res.status(500).json({ error: "Failed to post job" });

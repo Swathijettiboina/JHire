@@ -13,21 +13,23 @@ const Info = () => {
       <section className="mb-16">
         <h2 className="text-3xl font-semibold text-green-900 text-center mb-8">Explore JHIRE</h2>
         <div className="flex flex-wrap justify-center gap-6">
-          <img
-            src="https://via.placeholder.com/300x200?text=Job+Portal"
+          <a href="/alljobs"><img
+            src="jobsearch.jpg"
             alt="Job Portal"
             className="w-80 h-52 object-cover rounded-lg shadow-lg"
-          />
+          /></a>
+          <a href="/companies">
           <img
-            src="https://via.placeholder.com/300x200?text=Company+Listing"
+            src="office.jpg"
             alt="Company Listing"
             className="w-80 h-52 object-cover rounded-lg shadow-lg"
-          />
+          /></a>
+          <a href="/candidates">
           <img
-            src="https://via.placeholder.com/300x200?text=Job+Seeker"
+            src="seekers.jpg"
             alt="Job Seeker"
             className="w-80 h-52 object-cover rounded-lg shadow-lg"
-          />
+          /></a>
         </div>
       </section>
 

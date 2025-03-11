@@ -12,7 +12,6 @@ const AuthNavbar = () => {
 
   const handleLogout = async () => {
     try {
-      // Optimistically update UI
       setUser(null);
       setIsAuthenticated(false);
       
@@ -49,7 +48,6 @@ const AuthNavbar = () => {
             <p>JHire</p>
           </Link>
 
-          {/* Navbar Links (Centered) */}
           <div
             className="hidden md:flex space-x-6 mx-auto"
             style={{ fontFamily: "var(--eb_garamond-font)" }}
@@ -77,7 +75,16 @@ const AuthNavbar = () => {
               <Link to="/recruiters" className="hover:text-green-300 transition">
                 Find Recruiter
               </Link>
+              
             )}
+            {user && (
+              <Link to={user.userType === "hr" ? "/hr-dashboard" : "/seeker-dashboard"}>
+              Dash Board
+            </Link>
+              
+            )}
+            
+            
           </div>
 
           {/* Right-Side Authentication Links */}
@@ -85,7 +92,10 @@ const AuthNavbar = () => {
             {user ? (
               <>
                 <span className="text-sm font-medium">
-                  Welcome, {user.first_name}!
+                <Link to={user.userType === "hr" ? "/hr-dashboard" : "/seeker-dashboard"}>
+                Welcome, {user.first_name}!
+                </Link>
+                  
                 </span>
                 <Link to={user.userType === "hr" ? "/hr-dashboard" : "/seeker-dashboard"}>
                   <img
