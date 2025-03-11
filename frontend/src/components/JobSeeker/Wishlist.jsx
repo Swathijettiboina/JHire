@@ -2,10 +2,13 @@ import { useEffect, useState } from "react";
 import { useUser } from "../../context/UserContext";
 import axios from "axios";
 import { FaBuilding, FaMapMarkerAlt, FaBriefcase, FaTrash } from "react-icons/fa";
+import {useNavigate } from 'react-router-dom';
+
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:5000/jhire";
 
 const Wishlist = () => {
+  const navigate=useNavigate()
   const { user } = useUser();
   const [wishlist, setWishlist] = useState([]);
   const [error, setError] = useState(null);
@@ -25,10 +28,14 @@ const Wishlist = () => {
 
     fetchWishlist();
   }, [user]);
+  const handleapply=(id)=>{
+    console.log("hi"+id)
+    navigate(`/jobs/${id}`)
 
-  const removeFromWishlist = async (jobId) => {
+}  
+const removeFromWishlist = async (jobId) => {
     try {
-      await axios.delete(`${API_BASE_URL}/seeker/wishlist/${user.id}/${jobId}`);
+      await axios.delete(`${API_BASE_URL}/seeker/delwishlist/${user.id}/${jobId}`);
       setWishlist((prev) => prev.filter((job) => job.job_id !== jobId));
     } catch (err) {
       setError("Failed to remove job from wishlist.",err.message);
@@ -85,7 +92,7 @@ const Wishlist = () => {
 
                 
 
-                <button className="mt-4 w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition-all">
+                <button className="mt-4 w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition-all" onClick={()=>handleapply(job_id)}>
                   Apply Now
                 </button>
               </div>

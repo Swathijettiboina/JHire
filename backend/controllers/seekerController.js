@@ -166,8 +166,29 @@ const getWishlist = async (req, res) => {
         return res.status(500).json({ error: "Internal server error" });
     }
 };
+const delwishlist= async (req, res) => {
+    const { userId, jobId } = req.params;
+  
+    try {
+      // 🔥 Delete from `saved_jobs` table (wishlist table)
+      const { error } = await supabase
+        .from("saved_jobs")
+        .delete()
+        .match({ seeker_id: userId, job_id: jobId });
+  
+      if (error) {
+        console.error("Supabase Error:", error);
+        return res.status(500).json({ message: "Failed to remove job from wishlist.", error: error.message });
+      }
+  
+      res.status(200).json({ message: "Job removed from wishlist successfully." });
+    } catch (error) {
+      console.error("Server Error:", error);
+      res.status(500).json({ message: "Server error." });
+    }
+  };
 
 
 
 
-module.exports = { getAllSeekers, getSeekerById, registerSeeker,getSavedJobs,getWishlist };
+module.exports = { getAllSeekers, getSeekerById, registerSeeker,getSavedJobs,getWishlist ,delwishlist};

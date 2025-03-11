@@ -85,14 +85,12 @@ const SeekerDashboard = () => {
             <FaEdit /> Update Profile
           </li>
           <li className="mb-4 flex items-center justify-center gap-3 text-lg font-semibold hover:bg-green-800 py-2 px-4 rounded-lg cursor-pointer" onClick={() => setActiveTab("saved-jobs")}>
-            <FaBookmark /> Saved Jobs
+            <FaBookmark /> Applied Jobs
           </li>
           <li className="mb-4 flex items-center justify-center gap-3 text-lg font-semibold hover:bg-green-800 py-2 px-4 rounded-lg cursor-pointer" onClick={() => setActiveTab("wishlist")}>
             <FaClipboardCheck /> Wishlist
           </li>
-          <li className="mb-4 flex items-center justify-center gap-3 text-lg font-semibold hover:bg-green-800 py-2 px-4 rounded-lg cursor-pointer" onClick={() => setActiveTab("jobs")}>
-            <FaBriefcase /> Browse Jobs
-          </li>
+          
         </ul>
 
         <button
