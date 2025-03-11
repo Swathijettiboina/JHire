@@ -18,6 +18,9 @@ import SeekerListing from "./components/JobSeeker/SeekerListing";
 import ViewSeekerDetails from "./components/JobSeeker/ViewSeekerDetails";
 import Info from "./components/Pages/Info";
 import ViewCompany from "./components/CompanyComponents/ViewCompany";
+import CompanyListing from "./components/companyComponents/CompanyListing";
+
+
 
 
 function App() {
@@ -35,6 +38,7 @@ function App() {
           <Route path="/services" element={<Services/>} />
           <Route path="/candidates" element={<SeekerListing />} />
           <Route path="/info" element={<Info />} />
+          <Route path="/companies" element={<CompanyListing />} />
 
           {/* protected routes are wrapped  */}
           <Route element={<ProtectedRoute />}>

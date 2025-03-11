@@ -66,6 +66,9 @@ const AuthNavbar = () => {
             <Link to="/alljobs" className="hover:text-green-300 transition">
               Jobs
             </Link>
+            <Link to="/companies" className="hover:text-green-300 transition">
+              Companies
+            </Link>
             <Link to="/post-job" className="hover:text-green-300 transition">
               Post Job
             </Link>

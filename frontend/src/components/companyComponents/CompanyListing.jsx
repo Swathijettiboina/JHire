@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import CompanyCard from "./CompanyCard";
 
 const API_BASE_URL = import.meta.env.API_BASE_URL || "http://localhost:5000/jhire";
 
@@ -7,9 +8,8 @@ const CompanyListing = () => {
   const [companies, setCompanies] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
-
   const [currentPage, setCurrentPage] = useState(1);
-  const companiesPerPage = 5;
+  const companiesPerPage = 6;
 
   useEffect(() => {
     const fetchCompanies = async () => {
@@ -52,43 +52,27 @@ const CompanyListing = () => {
     );
 
   return (
-    <div className="container mx-auto p-6 max-w-4xl">
-      <h1 className="text-3xl font-bold mb-6 text-center text-gray-800">Company Listings</h1>
+    <div className="container mx-auto p-6 max-w-6xl">
+      <h1 className="text-3xl font-bold mb-6 text-center text-green-800">Company Listings</h1>
 
       {currentCompanies.length === 0 ? (
         <p className="text-center text-gray-500">No companies available at the moment.</p>
       ) : (
-        <table className="min-w-full bg-white shadow-md rounded-lg overflow-hidden">
-          <thead className="bg-gray-800 text-white">
-            <tr>
-              <th className="py-3 px-6 text-left">Company Name</th>
-              <th className="py-3 px-6 text-left">Location</th>
-              <th className="py-3 px-6 text-left">Website</th>
-            </tr>
-          </thead>
-          <tbody>
-            {currentCompanies.map((company) => (
-              <tr key={company.company_id} className="border-b hover:bg-gray-100">
-                <td className="py-3 px-6">{company.company_name}</td>
-                <td className="py-3 px-6">{company.company_location_city}, {company.company_location_country}</td>
-                <td className="py-3 px-6">
-                  <a href={company.company_website} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">
-                    {company.company_website}
-                  </a>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {currentCompanies.map((company) => (
+            <CompanyCard key={company.company_id} company={company} />
+          ))}
+        </div>
       )}
 
+      {/* Pagination Controls */}
       {companies.length > companiesPerPage && (
         <div className="flex justify-center items-center mt-6 space-x-4">
           <button
             className={`px-4 py-2 border rounded-lg ${
               currentPage === 1
                 ? "bg-gray-300 text-gray-600 cursor-not-allowed"
-                : "bg-blue-600 text-white hover:bg-blue-700"
+                : "bg-green-600 text-white hover:bg-green-700"
             }`}
             disabled={currentPage === 1}
             onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
@@ -102,7 +86,7 @@ const CompanyListing = () => {
             className={`px-4 py-2 border rounded-lg ${
               currentPage === totalPages
                 ? "bg-gray-300 text-gray-600 cursor-not-allowed"
-                : "bg-blue-600 text-white hover:bg-blue-700"
+                : "bg-green-600 text-white hover:bg-green-700"
             }`}
             disabled={currentPage === totalPages}
             onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
