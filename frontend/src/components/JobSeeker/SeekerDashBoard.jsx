@@ -11,10 +11,13 @@ import {
   FaTimes,
   FaMoon,
   FaSun,
+  FaClipboardCheck, // New Wishlist Icon
 } from "react-icons/fa";
 import SeekerProfile from "./SeekerProfile";
 import SeekerProfileUpdate from "./SeekerProfileUpdate";
 import SavedJobs from "./SavedJobs";
+import Wishlist from "./Wishlist";
+
 const API_BASE_URL = import.meta.env.API_BASE_URL || "http://localhost:5000/jhire";
 
 const SeekerDashboard = () => {
@@ -42,15 +45,18 @@ const SeekerDashboard = () => {
         return <SeekerProfileUpdate profile={profile} setProfile={setProfile} />;
       case "saved-jobs":
         return <SavedJobs />;
+      case "wishlist":
+        return <Wishlist />;
       case "jobs":
         return navigate("/alljobs");
       default:
-        return  <SeekerProfile profile={profile} />;
+        return <SeekerProfile profile={profile} />;
     }
   };
 
   return (
     <div className={`flex flex-col md:flex-row min-h-screen transition-all ${darkMode ? "bg-gray-900 text-white" : "bg-gray-100 text-black"}`}>
+     
       <div className="flex justify-between p-4 md:hidden">
         <button onClick={() => setSidebarOpen(!sidebarOpen)}>
           {sidebarOpen ? <FaTimes size={24} className="text-green-600" /> : <FaBars size={24} className="text-green-600" />}
@@ -72,32 +78,23 @@ const SeekerDashboard = () => {
           className="w-28 h-28 rounded-full object-cover border-4 border-white mx-auto"
         />
         <ul className="mt-6 text-center">
-          <li
-            className="mb-4 flex items-center justify-center gap-3 text-lg font-semibold hover:bg-green-800 py-2 px-4 rounded-lg cursor-pointer"
-            onClick={() => setActiveTab("profile")}
-          >
+          <li className="mb-4 flex items-center justify-center gap-3 text-lg font-semibold hover:bg-green-800 py-2 px-4 rounded-lg cursor-pointer" onClick={() => setActiveTab("profile")}>
             <FaUser /> My Profile
           </li>
-          <li
-            className="mb-4 flex items-center justify-center gap-3 text-lg font-semibold hover:bg-green-800 py-2 px-4 rounded-lg cursor-pointer"
-            onClick={() => setActiveTab("edit-profile")}
-          >
+          <li className="mb-4 flex items-center justify-center gap-3 text-lg font-semibold hover:bg-green-800 py-2 px-4 rounded-lg cursor-pointer" onClick={() => setActiveTab("edit-profile")}>
             <FaEdit /> Update Profile
           </li>
-          <li
-            className="mb-4 flex items-center justify-center gap-3 text-lg font-semibold hover:bg-green-800 py-2 px-4 rounded-lg cursor-pointer"
-            onClick={() => setActiveTab("saved-jobs")}
-          >
+          <li className="mb-4 flex items-center justify-center gap-3 text-lg font-semibold hover:bg-green-800 py-2 px-4 rounded-lg cursor-pointer" onClick={() => setActiveTab("saved-jobs")}>
             <FaBookmark /> Saved Jobs
           </li>
-          <li
-            className="mb-4 flex items-center justify-center gap-3 text-lg font-semibold hover:bg-green-800 py-2 px-4 rounded-lg cursor-pointer"
-            onClick={() => setActiveTab("jobs")}
-          >
+          <li className="mb-4 flex items-center justify-center gap-3 text-lg font-semibold hover:bg-green-800 py-2 px-4 rounded-lg cursor-pointer" onClick={() => setActiveTab("wishlist")}>
+            <FaClipboardCheck /> Wishlist
+          </li>
+          <li className="mb-4 flex items-center justify-center gap-3 text-lg font-semibold hover:bg-green-800 py-2 px-4 rounded-lg cursor-pointer" onClick={() => setActiveTab("jobs")}>
             <FaBriefcase /> Browse Jobs
           </li>
-          
         </ul>
+
         <button
           onClick={() => setDarkMode(!darkMode)}
           className="w-full mt-6 py-2 px-4 text-lg font-semibold rounded-lg flex items-center justify-center gap-3 bg-gray-700 hover:bg-gray-800"

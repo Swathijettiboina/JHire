@@ -7,4 +7,5 @@ router.get('/:id', seekerController.getSeekerById);
 router.post('/register', seekerController.registerSeeker);
 router.put("/update-profile/:id", updateSeekerProfile);
 router.get("/applied/:id",seekerController.getSavedJobs)
+router.get("/wishlist/:id",seekerController.getWishlist)
 module.exports = router;
