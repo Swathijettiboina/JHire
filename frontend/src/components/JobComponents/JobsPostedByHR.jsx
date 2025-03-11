@@ -64,7 +64,7 @@ const JobsPostedByHR = () => {
                 {/* Job Details */}
                 <div className="flex flex-col flex-grow ml-4">
                   <h2 className="text-xl font-bold text-green-900">{job.job_title}</h2>
-                  <div className="flex gap-20">
+                  <div className="flex flex-col-3 justify-between gap-10">
                   <p className="text-green-700">Role: {job.role}</p>
                   <p className="text-green-700">Total Applicants: {job.total_applied}</p>
                   <p className="text-green-700">Job Views: {job.job_view_count}</p>

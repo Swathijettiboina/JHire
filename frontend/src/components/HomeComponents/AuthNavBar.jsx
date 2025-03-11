@@ -2,37 +2,34 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useUser } from "../../context/UserContext";
 import api from "../../api/axiosInstance";
-import Modal from "react-modal";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const AuthNavbar = () => {
   const { user, setUser, setIsAuthenticated } = useUser();
   const navigate = useNavigate();
-  const [modalOpen, setModalOpen] = useState(false);
-  const [modalMessage, setModalMessage] = useState({ type: "", text: "" });
   const [menuOpen, setMenuOpen] = useState(false);
 
   const handleLogout = async () => {
     try {
-      await api.post("/auth/logout");
+      // Optimistically update UI
       setUser(null);
       setIsAuthenticated(false);
-      setModalMessage({
-        type: "success",
-        text: "You have been logged out successfully!",
-      });
-      setModalOpen(true);
+      
+      await api.post("/auth/logout", {}, { withCredentials: true });
+      toast.dismiss();
+      toast.success("Logged out successfully!");
+      
       setTimeout(() => {
-        setModalOpen(false);
-        navigate("/");
-      }, 2000);
+        navigate("/login");
+      }, 10);
     } catch (error) {
-      setModalMessage({
-        type: "error",
-        text: "Logout failed. Please try again!",
-      });
-      setModalOpen(true);
+      toast.dismiss();
+
+      toast.error("Failed to logout. Please try again.");
     }
   };
+  
 
   return (
     <>
@@ -66,9 +63,21 @@ const AuthNavbar = () => {
             <Link to="/alljobs" className="hover:text-green-300 transition">
               Jobs
             </Link>
-            <Link to="/post-job" className="hover:text-green-300 transition">
-              Post Job
+            <Link to="/companies" className="hover:text-green-300 transition">
+              Companies
             </Link>
+
+            {/* Show "Post Job" only for HRs */}
+            {user?.userType === "hr" && (
+              <Link to="/post-job" className="hover:text-green-300 transition">
+                Post Job
+              </Link>
+            )}
+            {user?.userType === "seeker" && (
+              <Link to="/recruiters" className="hover:text-green-300 transition">
+                Find Recruiter
+              </Link>
+            )}
           </div>
 
           {/* Right-Side Authentication Links */}
@@ -78,29 +87,16 @@ const AuthNavbar = () => {
                 <span className="text-sm font-medium">
                   Welcome, {user.first_name}!
                 </span>
-                {user.userType === "hr" ? (
-                  <Link to="/hr-dashboard">
-                    <img
-                      src={
-                        user.photo_url ||
-                        `https://ui-avatars.com/api/?name=${user.first_name}`
-                      }
-                      alt="Profile"
-                      className="h-10 w-10 rounded-full"
-                    />
-                  </Link>
-                ) : (
-                  <Link to="/seeker-dashboard">
-                    <img
-                      src={
-                        user.photo_url ||
-                        `https://ui-avatars.com/api/?name=${user.first_name}`
-                      }
-                      alt="Profile"
-                      className="h-10 w-10 rounded-full"
-                    />
-                  </Link>
-                )}
+                <Link to={user.userType === "hr" ? "/hr-dashboard" : "/seeker-dashboard"}>
+                  <img
+                    src={
+                      user.photo_url ||
+                      `https://ui-avatars.com/api/?name=${user.first_name}`
+                    }
+                    alt="Profile"
+                    className="h-10 w-10 rounded-full"
+                  />
+                </Link>
                 <button
                   onClick={handleLogout}
                   className="bg-red-500 hover:bg-red-600 px-4 py-2 rounded-lg transition"
@@ -149,51 +145,28 @@ const AuthNavbar = () => {
             <Link to="/alljobs" className="hover:text-green-300 transition">
               Jobs
             </Link>
-            <Link to="/post-job" className="hover:text-green-300 transition">
-              Post Job
-            </Link>
-            <Link to="/login" className="hover:text-green-300 transition">
-              Login
-            </Link>
-            <Link
-              to="/register"
-              className="bg-green-500 hover:bg-green-600 px-4 py-2 rounded-lg transition"
-            >
-              Register
-            </Link>
+            {/* Show "Post Job" only for HRs */}
+            {user?.userType === "hr" && (
+              <Link to="/post-job" className="hover:text-green-300 transition">
+                Post Job
+              </Link>
+            )}
+            {!user && (
+              <>
+                <Link to="/login" className="hover:text-green-300 transition">
+                  Login
+                </Link>
+                <Link
+                  to="/register"
+                  className="bg-green-500 hover:bg-green-600 px-4 py-2 rounded-lg transition"
+                >
+                  Register
+                </Link>
+              </>
+            )}
           </div>
         )}
       </nav>
-
-      {/* Logout Modal */}
-      <Modal
-        isOpen={modalOpen}
-        onRequestClose={() => setModalOpen(false)}
-        className="bg-white w-[350px] p-6 rounded-lg shadow-xl fixed top-10 left-1/2 transform -translate-x-1/2 text-center border border-gray-300"
-        overlayClassName="fixed inset-0 bg-transparent"
-      >
-        <div className="flex flex-col items-center">
-          <div
-            className={`w-16 h-16 flex items-center justify-center rounded-full mb-4 ${
-              modalMessage.type === "success"
-                ? "bg-green-100 text-green-600"
-                : "bg-red-100 text-red-600"
-            }`}
-          >
-            {modalMessage.type === "success" ? "✔" : "❌"}
-          </div>
-          <h2 className="text-lg font-semibold mb-2">
-            {modalMessage.type === "success" ? "Success" : "Logout Failed!"}
-          </h2>
-          <p className="text-gray-600">{modalMessage.text}</p>
-          <button
-            className="mt-4 bg-red-500 text-white px-4 py-2 rounded-lg"
-            onClick={() => setModalOpen(false)}
-          >
-            OK
-          </button>
-        </div>
-      </Modal>
     </>
   );
 };

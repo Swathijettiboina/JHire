@@ -57,10 +57,10 @@ const ViewSeekerDetails = () => {
             <p className="text-lg text-gray-500">{seeker.email}</p>
           </div>
         </div>
-        <div className="mt-4 md:mt-0 flex space-x-3">
+        {/* <div className="mt-4 md:mt-0 flex space-x-3">
           <button className="px-4 py-2 bg-green-600 text-white rounded-lg shadow hover:bg-green-700 transition">Shortlist</button>
           <a href={seeker.resume} target="_blank" rel="noopener noreferrer" className="px-4 py-2 bg-blue-600 text-white rounded-lg shadow hover:bg-blue-700 transition">Download CV</a>
-        </div>
+        </div> */}
       </div>
 
       <div className="mt-6 grid grid-cols-1 md:grid-cols-3 gap-8">

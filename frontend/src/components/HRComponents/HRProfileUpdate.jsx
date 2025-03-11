@@ -110,7 +110,8 @@ const HRProfileUpdate = () => {
         { headers: { "Content-Type": "application/json" } }
       );
 
-      navigate("/hr-dashboard");
+      // navigate("/hr-dashboard");
+      window.location.reload();
     } catch (error) {
       console.error("Error updating profile:", error);
     }

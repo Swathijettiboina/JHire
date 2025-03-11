@@ -17,6 +17,7 @@ import ViewJobAlongWIthApplicants from "./components/JobComponents/ViewJobAlongW
 import SeekerListing from "./components/JobSeeker/SeekerListing";
 import ViewSeekerDetails from "./components/JobSeeker/ViewSeekerDetails";
 import Info from "./components/Pages/Info";
+import { ToastContainer } from "react-toastify";
 
 
 function App() {

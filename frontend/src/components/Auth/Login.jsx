@@ -3,17 +3,14 @@ import { useNavigate } from "react-router-dom";
 import { useUser } from "../../context/UserContext";
 import api from "../../api/axiosInstance";
 import { FaUser, FaLock, FaEye, FaEyeSlash } from "react-icons/fa";
-import Modal from "react-modal";
-
-Modal.setAppElement("#root"); // Required for accessibility
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [modalOpen, setModalOpen] = useState(false);
-  const [modalMessage, setModalMessage] = useState({ type: "", text: "" });
   const navigate = useNavigate();
   const { setUser } = useUser();
 
@@ -27,28 +24,20 @@ const Login = () => {
         "/auth/login",
         { email: email.toLowerCase(), password },
         { withCredentials: true }
-    );
-    
+      );
+
       setUser(response.data.user);
       setLoading(false);
-
-      // Show success modal
-      setModalMessage({ type: "success", text: "Login Successful!" });
-      setModalOpen(true);
+      
+      toast.dismiss();
+      toast.success("Login Successful!");
 
       setTimeout(() => {
-        setModalOpen(false);
         navigate("/");
       }, 2000);
     } catch (err) {
       setLoading(false);
-
-      // Show error modal
-      setModalMessage({
-        type: "error",
-        text: err.response?.data?.message || "Invalid username or password",
-      });
-      setModalOpen(true);
+      toast.error(err.response?.data?.message || "Invalid username or password");
     }
   };
 
@@ -130,33 +119,8 @@ const Login = () => {
         </div>
       </div>
 
-      <Modal
-  isOpen={modalOpen}
-  onRequestClose={() => setModalOpen(false)}
-  className="bg-white w-[350px] p-6 rounded-lg shadow-xl fixed top-10 left-1/2 transform -translate-x-1/2 text-center border border-gray-300"
-  overlayClassName="fixed inset-0 bg-transparent"
->
-  <div className="flex flex-col items-center">
-    <div
-      className={`w-16 h-16 flex items-center justify-center rounded-full mb-4 ${
-        modalMessage.type === "success" ? "bg-green-100 text-green-600" : "bg-red-100 text-red-600"
-      }`}
-    >
-      {modalMessage.type === "success" ? "✔️" : "❌"}
-    </div>
-    <h2 className="text-lg font-semibold mb-2">
-      {modalMessage.type === "success" ? "Success" : "Login Failed!"}
-    </h2>
-    <p className="text-gray-600">{modalMessage.text}</p>
-    <button
-      className="mt-4 bg-red-500 text-white px-4 py-2 rounded-lg"
-      onClick={() => setModalOpen(false)}
-    >
-      OK
-    </button>
-  </div>
-</Modal>
-
+      {/* Toast Notifications */}
+      <ToastContainer position="top-right" autoClose={3000} hideProgressBar />
     </div>
   );
 };
