@@ -18,29 +18,55 @@ const SeekerProfileUpdate = () => {
     age: "",
     gender: "",
     about_me: "",
-    education: "",
-    experience: "",
+    user_type: "seeker",
+    university_name: "",
+    college_name: "",
+    specialization: "",
+    degree_name: "",
+    passing_year: "",
+    grade_obtained: "",
+    certification_list: "",
+    years_of_experience: "",
+    previous_company: "",
+    previous_job_role: "",
     skills: "", 
-    linkedin_profile: "",
-    profile_url: "", //  Use 'profile_url' 
+    seeker_linkedin_profile: "",
+    city_name: "",
+    country_name: "",
+    pin_code: "",
+    resume: "",
+    profile_url: "",
   });
 
   const [imagePreview, setImagePreview] = useState("");
 
   useEffect(() => {
     if (!user?.id) return;
-
+  
     axios.get(`${API_BASE_URL}/seeker/${user.id}`)
       .then((response) => {
-        setFormData({
-          ...response.data,
-          skills: Array.isArray(response.data.skills) ? response.data.skills.join(", ") : response.data.skills || "",
-          email: response.data.email || "",
-        });
-        setImagePreview(response.data.profile_url || ""); // Use 'profile_url' 
+        console.log("API Response:", response.data); // Debugging
+  
+        if (!response.data || !Array.isArray(response.data.data) || response.data.data.length === 0) {
+          console.error("Invalid response format or empty data", response.data);
+          return;
+        }
+  
+        const seekerData = response.data.data[0]; // Fix here to access the correct array
+  
+        setFormData((prev) => ({
+          ...prev,
+          ...seekerData,
+          skills: Array.isArray(seekerData.skills) ? seekerData.skills.join(", ") : seekerData.skills || "",
+        }));
+  
+        setImagePreview(seekerData.profile_url || "https://placehold.co/150");
       })
-      .catch((error) => console.error("Error fetching seeker profile:", error));
+      .catch((error) => {
+        console.error("Error fetching seeker profile:", error);
+      });
   }, [user?.id]);
+  
 
   const handleChange = (e) => {
     setFormData((prev) => ({
@@ -76,7 +102,7 @@ const SeekerProfileUpdate = () => {
       console.log(publicUrl);
       try {
         await axios.put(`${API_BASE_URL}/seeker/update-profile/${user.id}`, {
-          profile_url: publicUrl, // Update backend field correctly
+          profile_url: publicUrl,
         });
         setFormData((prev) => ({ ...prev, profile_url: publicUrl }));
         setImagePreview(publicUrl);
@@ -108,9 +134,10 @@ const SeekerProfileUpdate = () => {
 
   return (
     <div className="min-h-screen bg-gray-50 p-10 flex gap-8">
+      {/* Left Profile Section */}
       <div className="w-1/3 bg-white p-6 rounded-lg shadow-md flex flex-col items-center">
         <h1 className="text-2xl font-bold text-gray-600 mb-4">
-          Hello, {`${formData.first_name} ${formData.last_name}`.trim() || "Seeker"}!
+          Hello, {formData.first_name && formData.last_name ? `${formData.first_name} ${formData.last_name}` : "Seeker"}!
         </h1>
         <div className="w-32 h-32 rounded-full overflow-hidden border-4 border-gray-300">
           <img
@@ -124,32 +151,24 @@ const SeekerProfileUpdate = () => {
         <p className="text-gray-600 mt-2">{formData.email}</p>
       </div>
 
+      {/* Right Form Section */}
       <div className="w-2/3 bg-white p-6 rounded-lg shadow-md">
         <h2 className="text-lg font-semibold text-gray-700 mb-4">Personal Information</h2>
         <form onSubmit={handleSubmit} className="grid grid-cols-2 gap-4">
-          {["phone_number", "age", "gender", "education", "experience", "skills", "linkedin_profile"].map((name) => (
-            <div key={name}>
-              <label className="block text-gray-700 font-medium">{name.replace("_", " ").toUpperCase()}</label>
-              <input
-                type="text"
-                name={name}
-                value={formData[name] || ""}
-                onChange={handleChange}
-                className="w-full p-2 border rounded-lg"
-              />
-            </div>
-          ))}
-
-          <div className="col-span-2">
-            <label className="block text-gray-700 font-medium">About Me</label>
-            <textarea
-              name="about_me"
-              value={formData.about_me || ""}
-              onChange={handleChange}
-              className="w-full p-2 border rounded-lg h-24 resize-none"
-            />
-          </div>
-
+          {Object.keys(formData)
+            .filter((name) => !["seeker_id", "password_hash", "is_job_seeker", "profile_url", "email"].includes(name))
+            .map((name) => (
+              <div key={name}>
+                <label className="block text-gray-700 font-medium">{name.replace(/_/g, " ").toUpperCase()}</label>
+                <input
+                  type="text"
+                  name={name}
+                  value={formData[name] || ""}
+                  onChange={handleChange}
+                  className="w-full p-2 border rounded-lg"
+                />
+              </div>
+            ))}
           <div className="col-span-2 flex justify-center">
             <button type="submit" className="bg-gray-500 text-white px-6 py-2 rounded-lg hover:bg-gray-600">
               Update Profile

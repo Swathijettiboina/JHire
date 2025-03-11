@@ -125,5 +125,49 @@ const getSavedJobs = async (req, res) => {
         return res.status(500).json({ error: "Internal server error" });
     }
 };
+const getWishlist = async (req, res) => {
+    try {
+        console.log("📢 Fetching wishlist for seeker:", req.params.id);
+        const seeker_id = req.params.id.trim();
 
-module.exports = { getAllSeekers, getSeekerById, registerSeeker,getSavedJobs };
+        if (!seeker_id) {
+            return res.status(400).json({ error: "Seeker ID is required" });
+        }
+
+        // Fetch saved jobs with job details
+        const { data: wishlist, error: wishlistError } = await supabase
+            .from("saved_jobs")
+            .select(`
+                job_id,
+                jobs_table (
+                    job_title,
+                    job_location,
+                    job_type,
+                    company:company_table ( company_name )
+                )
+            `)
+            .eq("seeker_id", seeker_id);
+
+        console.log("Wishlist Data:", wishlist); // ✅ Fixed
+
+        if (wishlistError) {
+            console.error("❌ Supabase Error (saved_jobs):", wishlistError.message);
+            return res.status(500).json({ error: wishlistError.message });
+        }
+
+        if (!wishlist || wishlist.length === 0) {
+            return res.status(200).json({ wishlist: [] });
+        }
+
+        return res.status(200).json({ wishlist });
+
+    } catch (err) {
+        console.error("❌ Internal Server Error:", err);
+        return res.status(500).json({ error: "Internal server error" });
+    }
+};
+
+
+
+
+module.exports = { getAllSeekers, getSeekerById, registerSeeker,getSavedJobs,getWishlist };
