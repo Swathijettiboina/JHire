@@ -73,7 +73,7 @@ const PostJobForm = () => {
       <div className="w-full max-w-2xl text-center mb-6">
         <marquee behavior="scroll" direction="right">
         <blockquote className="text-lg italic text-green-700">
-          "Great HR professionals don't just fill positions; they build careers and change lives."
+          &quot;Great HR professionals don&apos;t just fill positions; they build careers and change lives.&quot;
         </blockquote>
         </marquee>
       </div>

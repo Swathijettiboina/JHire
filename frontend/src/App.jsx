@@ -17,6 +17,7 @@ import ViewJobAlongWIthApplicants from "./components/JobComponents/ViewJobAlongW
 import SeekerListing from "./components/JobSeeker/SeekerListing";
 import ViewSeekerDetails from "./components/JobSeeker/ViewSeekerDetails";
 import Info from "./components/Pages/Info";
+import ViewCompany from "./components/CompanyComponents/ViewCompany";
 
 
 function App() {
@@ -43,6 +44,7 @@ function App() {
             <Route path="/post-job" element={<PostJobForm />} />
             <Route path="/hr/job-details/:job_id" element={<ViewJobAlongWIthApplicants />} />
             <Route path="/seeker-profile/:seeker_id" element={<ViewSeekerDetails />} />
+            <Route path="/companies/:companyId" element={<ViewCompany />} />
           </Route>
         </Routes>
       </Router>

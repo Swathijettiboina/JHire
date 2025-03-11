@@ -1,5 +1,4 @@
 import { FaInstagram, FaGlobe, FaWhatsapp } from "react-icons/fa";
-import { Link,  } from "react-router-dom";
 
 const About = () => {
   return (
