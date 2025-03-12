@@ -42,6 +42,7 @@ const SeekerProfileUpdate = () => {
 
   useEffect(() => {
     if (!user?.id) return;
+    console.log("hi,from update")
 
     axios.get(`${API_BASE_URL}/seeker/${user.id}`)
       .then((response) => {
@@ -57,7 +58,7 @@ const SeekerProfileUpdate = () => {
           ...seekerData,
           skills: Array.isArray(seekerData.skills) ? seekerData.skills.join(", ") : seekerData.skills || "",
         }));
-
+       console.log(seekerData)
         setImagePreview(seekerData.profile_url || "https://placehold.co/150");
       })
       .catch((error) => {
@@ -147,7 +148,13 @@ const SeekerProfileUpdate = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!user) return;
+    console.log(user.id)
+    if (!user) {
+      console.error("User not authenticated");
+      return;
+    }
+    
+   
 
     const formattedSkills = Array.isArray(formData.skills)
       ? formData.skills
@@ -194,7 +201,7 @@ const SeekerProfileUpdate = () => {
         <h2 className="text-lg font-semibold text-gray-700 mb-4">Personal Information</h2>
         <form onSubmit={handleSubmit} className="grid grid-cols-2 gap-4">
           {Object.keys(formData)
-            .filter((name) => !["seeker_id", "password_hash", "is_job_seeker", "profile_url", "email","resume"].includes(name))
+            .filter((name) => !["seeker_id", "password_hash", "is_job_seeker", "profile_url", "email","resume","user_type","pin_code"].includes(name))
             .map((name) => (
               <div key={name}>
                 <label className="block text-gray-700 font-medium">{name.replace(/_/g, " ").toUpperCase()}</label>

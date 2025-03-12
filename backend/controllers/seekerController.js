@@ -82,18 +82,18 @@ const getSavedJobs = async (req, res) => {
             return res.status(400).json({ error: "Seeker ID is required" });
         }
 
-        // Fetch saved job IDs
+        // Fetch saved job IDs along with applied_date
         const { data: savedJobs, error: savedJobsError } = await supabase
-            .from("saved_jobs")
-            .select("job_id")
+            .from("applied_jobs")
+            .select("job_id, applied_at")
             .eq("seeker_id", seeker_id);
 
         if (savedJobsError) {
-            console.error("Supabase Error (saved_jobs):", savedJobsError.message);
+            console.error("Supabase Error (applied_jobs):", savedJobsError.message);
             return res.status(500).json({ error: savedJobsError.message });
         }
 
-        console.log("Saved Job IDs:", savedJobs);
+        console.log("Saved Jobs Data:", savedJobs);
         const jobIds = savedJobs.map((job) => job.job_id);
 
         if (jobIds.length === 0) {
@@ -108,23 +108,34 @@ const getSavedJobs = async (req, res) => {
                 job_title,
                 job_location,
                 job_type,
-                company_table ( company_name )  
+                company_table ( company_name ),
+                date_posted,
+                job_status
             `)
             .in("job_id", jobIds);
 
         if (jobDetailsError) {
-            console.error(" Supabase Error (jobs_table):", jobDetailsError.message);
+            console.error("Supabase Error (jobs_table):", jobDetailsError.message);
             return res.status(500).json({ error: jobDetailsError.message });
         }
 
         console.log("Job Details:", jobDetails);
-        return res.status(200).json({ savedJobs: jobDetails });
+
+        // Merge applied_date into jobDetails
+        const mergedJobs = jobDetails.map((job) => {
+            const appliedJob = savedJobs.find((applied) => applied.job_id === job.job_id);
+            return { ...job, applied_at: appliedJob ? appliedJob.applied_at : null };
+        });
+        console.log(mergedJobs)
+
+        return res.status(200).json({ savedJobs: mergedJobs });
 
     } catch (err) {
-        console.error(" Internal Server Error:", err);
+        console.error("Internal Server Error:", err);
         return res.status(500).json({ error: "Internal server error" });
     }
 };
+
 const getWishlist = async (req, res) => {
     try {
         console.log("📢 Fetching wishlist for seeker:", req.params.id);
@@ -146,7 +157,7 @@ const getWishlist = async (req, res) => {
                     company:company_table ( company_name )
                 )
             `)
-            .eq("seeker_id", seeker_id);
+            .eq("seeker_id", seeker_id).eq("ispresent", true);
 
         console.log("Wishlist Data:", wishlist); // ✅ Fixed
 
@@ -166,27 +177,35 @@ const getWishlist = async (req, res) => {
         return res.status(500).json({ error: "Internal server error" });
     }
 };
-const delwishlist= async (req, res) => {
+const delwishlist = async (req, res) => {
     const { userId, jobId } = req.params;
-  
+
     try {
-      // 🔥 Delete from `saved_jobs` table (wishlist table)
-      const { error } = await supabase
-        .from("saved_jobs")
-        .delete()
-        .match({ seeker_id: userId, job_id: jobId });
-  
-      if (error) {
-        console.error("Supabase Error:", error);
-        return res.status(500).json({ message: "Failed to remove job from wishlist.", error: error.message });
-      }
-  
-      res.status(200).json({ message: "Job removed from wishlist successfully." });
+        // 🔥 Update `ispresent` field to false instead of deleting
+        const { data, error } = await supabase
+            .from("saved_jobs")
+            .update({ ispresent: false })
+            .eq("seeker_id", userId)
+            .eq("job_id", jobId)
+            .select(); // Retrieve updated rows to check if the update happened
+
+        if (error) {
+            console.error("Supabase Error:", error);
+            return res.status(500).json({ message: "Failed to remove job from wishlist.", error: error.message });
+        }
+
+        // ✅ Check if any rows were updated
+        if (data.length === 0) {
+            return res.status(404).json({ message: "Job not found or already removed from wishlist." });
+        }
+
+        res.status(200).json({ message: "Job removed from wishlist successfully." });
     } catch (error) {
-      console.error("Server Error:", error);
-      res.status(500).json({ message: "Server error." });
+        console.error("Server Error:", error);
+        res.status(500).json({ message: "Server error." });
     }
-  };
+};
+
 
 
 
