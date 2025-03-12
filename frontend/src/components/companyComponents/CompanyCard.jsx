@@ -1,6 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types"; 
 import { FaMapMarkerAlt, FaLink, FaEnvelope } from "react-icons/fa";
+import { Link } from "react-router-dom";
 
 const CompanyCard = ({ company }) => {
   return (
@@ -47,6 +48,12 @@ const CompanyCard = ({ company }) => {
             <FaLink className="mr-1" /> LinkedIn Profile
           </a>
         )}
+        <Link
+            to={`/companies/${company.company_id}`}
+            className="bg-green-600 text-white px-6 py-2 rounded-lg shadow-md hover:bg-green-700 transition-all"
+          >
+            View Company
+          </Link>
       </div>
     </div>
   );
