@@ -17,6 +17,7 @@ const SavedJobs = () => {
       try {
         const response = await axios.get(`${API_BASE_URL}/seeker/applied/${user.id}`);
         setSavedJobs(Array.isArray(response.data?.savedJobs) ? response.data.savedJobs : []);
+        console.log(response.data.savedJobs);
       } catch (err) {
         setError(err.response?.data?.message || "Failed to fetch saved jobs.");
       }
@@ -27,12 +28,12 @@ const SavedJobs = () => {
 
   return (
     <div className="container mx-auto px-6 py-8">
-      <h2 className="text-3xl font-bold text-gray-800 mb-6">Saved Jobs</h2>
+      <h2 className="text-3xl font-bold text-gray-800 mb-6">Applied Jobs</h2>
 
       {error && <p className="text-red-500 text-lg">{error}</p>}
 
       {savedJobs.length === 0 && !error ? (
-        <p className="text-gray-600 text-lg">No saved jobs yet.</p>
+        <p className="text-gray-600 text-lg">No Applied jobs yet.</p>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {savedJobs.map(({ job_id, job_title, job_location, job_type, company_table }) => (

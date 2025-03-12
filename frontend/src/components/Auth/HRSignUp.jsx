@@ -209,7 +209,7 @@ const HRSignUp = () => {
               </div>
             </div>
 
-       
+          </form>
           
           {!companyExists && (
               <div className="flex justify-between bg-green-50 p-4 rounded-md shadow-sm">
@@ -240,7 +240,6 @@ const HRSignUp = () => {
             >
               {companyExists ? "Register HR" : "Register Company & HR"}
             </button>
-            </form>
         </div>
       </div>
     </div>

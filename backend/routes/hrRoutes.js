@@ -1,7 +1,7 @@
 const express = require('express');
 //const multer = require('multer');
 //const upload = multer({ storage: multer.memoryStorage() }); // In-memory file storage for image uploads
-const {  getAllHrs, getHrById, getJobsByHrId, registerHR, registerCompany, checkCompanyByDomain,getJobById } = require('../controllers/hrController');
+const { getHrByCompanyId, getAllHrs, getHrById, getJobsByHrId, registerHR, registerCompany, checkCompanyByDomain,getJobById } = require('../controllers/hrController');
 const { updateHrProfile } = require('../controllers/updateHRprofile');
 const {updateApplicationStatus}=require('../controllers/appliedJobs');
 const router = express.Router();
@@ -29,4 +29,5 @@ router.get("/company/check/:domain", checkCompanyByDomain);
 // Route to update HR profile (with optional photo upload)
 router.put("/update-profile/:id", updateHrProfile);
 
+router.get('/getHRsByCompany/:companyId', getHrByCompanyId);
 module.exports = router;

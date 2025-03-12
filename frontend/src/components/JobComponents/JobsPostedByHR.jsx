@@ -54,7 +54,7 @@ const JobsPostedByHR = () => {
         ) : (
           <div className="flex flex-col space-y-4">
             {jobs.map((job) => (
-              <div key={job.job_id} className="p-4 border rounded-lg shadow-md bg-green-100 gap-5 flex items-center justify-between">
+              <div key={job.job_id} className="p-4 border rounded-lg shadow-md bg-white-100 gap-5 flex items-center justify-between">
                 
                 {/* Job Profile Icon */}
                 <div className="w-15 h-15 flex items-center justify-center bg-green-600 text-white text-lg font-bold rounded-full">
@@ -67,7 +67,7 @@ const JobsPostedByHR = () => {
                   <div className="flex flex-col-3 justify-between gap-10">
                   <p className="text-green-700">Role: {job.role}</p>
                   <p className="text-green-700">Total Applicants: {job.total_applied}</p>
-                  <p className="text-green-700">Job Views: {job.job_view_count}</p>
+                  {/* <p className="text-green-700">Job Views: {job.job_view_count}</p> */}
                   </div>
                   <p className="text-green-700">Date Posted: {new Date(job.date_posted).toLocaleDateString()}</p>
                 </div>

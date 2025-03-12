@@ -35,7 +35,7 @@ const registerHR = async (req, res) => {
         // Company exists, assign HR to company
         const companyId = company[0].company_id;
         const hashedPassword = await bcrypt.hash(password, 10);
-
+        email=email.toLowerCase();
         const { data: hr, error: hrInsertError } = await supabase
             .from("hr_table")
             .insert([{
@@ -105,7 +105,7 @@ const getAllHrs = async (req, res) => {
             .select('*');
         if (error) throw error;
 
-        res.status(200).json(data);
+        res.status(200).json({hrs:data});
     } catch (error) {
         res.status(500).json({ error: "Internal server error", details: error.message });
     }
@@ -211,5 +211,20 @@ const getJobById = async (req, res) => {
     }
 };
 
+const getHrByCompanyId = async (req, res) => {
+    try {
+        const { companyId } = req.params;
+        const { data, error } = await supabase
+            .from('hr_table')
+            .select('*')
+            .eq('company_id', companyId);
 
-module.exports = { checkCompanyByDomain, getAllHrs, getHrById, getJobsByHrId, registerHR, registerCompany ,getJobById};
+        if (error) throw error;
+        // if (!data || data.length === 0) return res.status(404).json({ message: "HR not found" });
+
+        res.status(200).json(data);
+    } catch (error) {
+        res.status(500).json({ error: "Internal server error", details: error.message });
+    }
+}
+module.exports = { checkCompanyByDomain, getAllHrs, getHrById, getJobsByHrId, registerHR, registerCompany ,getJobById,getHrByCompanyId};
