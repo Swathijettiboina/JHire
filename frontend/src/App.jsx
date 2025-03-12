@@ -19,6 +19,7 @@ import Info from "./components/Pages/Info";
 import ViewCompany from "./components/CompanyComponents/ViewCompany";
 import CompanyListing from "./components/companyComponents/CompanyListing";
 import ContactPage from "./components/Pages/ContactPage";
+import HRListings from "./components/HRComponents/HRListings";
 
 
 
@@ -39,6 +40,7 @@ function App() {
           <Route path="/info" element={<Info />} />
           <Route path="/companies" element={<CompanyListing />} />
           <Route path="/contactus" element={<ContactPage/>}/>
+          <Route path="/recruiters" element={<HRListings/>}/>
 
           {/* protected routes are wrapped  */}
           <Route element={<ProtectedRoute />}>

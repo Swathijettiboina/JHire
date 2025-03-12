@@ -57,10 +57,10 @@ const ViewSeekerDetails = () => {
             <p className="text-lg text-gray-500">{seeker.email}</p>
           </div>
         </div>
-        {/* <div className="mt-4 md:mt-0 flex space-x-3">
-          <button className="px-4 py-2 bg-green-600 text-white rounded-lg shadow hover:bg-green-700 transition">Shortlist</button>
-          <a href={seeker.resume} target="_blank" rel="noopener noreferrer" className="px-4 py-2 bg-blue-600 text-white rounded-lg shadow hover:bg-blue-700 transition">Download CV</a>
-        </div> */}
+         <div className="mt-4 md:mt-0 flex space-x-3">
+          {/* <button className="px-4 py-2 bg-green-600 text-white rounded-lg shadow hover:bg-green-700 transition">Shortlist</button> */}
+          <a href={seeker.resume} target="_blank" rel="noopener noreferrer" className="px-4 py-2 bg-blue-600 text-white rounded-lg shadow hover:bg-blue-700 transition">Veiw Resume</a>
+        </div> 
       </div>
 
       <div className="mt-6 grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -80,13 +80,22 @@ const ViewSeekerDetails = () => {
             <p className="text-gray-600">{seeker.years_of_experience} years</p>
           </div>
           <div>
-            <h2 className="text-xl font-semibold text-green-600">Skills</h2>
-            <div className="flex flex-wrap gap-2 mt-2">
-              {seeker.skills.map(skill => (
-                <span key={skill} className="bg-gray-200 text-gray-800 px-3 py-1 rounded-full text-sm">{skill}</span>
-              ))}
-            </div>
-          </div>
+  <h2 className="text-xl font-semibold text-green-600">Skills</h2>
+  <div className="flex flex-wrap gap-2 mt-2">
+    {Array.isArray(seeker.skills) && seeker.skills.length > 0 ? (
+      seeker.skills.map((skill) => (
+        <span
+          key={skill}
+          className="bg-gray-200 text-gray-800 px-3 py-1 rounded-full text-sm"
+        >
+          {skill}
+        </span>
+      ))
+    ) : (
+      <span className="text-gray-500 text-sm">No skills provided</span>
+    )}
+  </div>
+</div>
         </div>
 
         <div className="bg-gray-100 p-6 rounded-lg shadow">

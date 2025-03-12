@@ -35,7 +35,7 @@ const registerHR = async (req, res) => {
         // Company exists, assign HR to company
         const companyId = company[0].company_id;
         const hashedPassword = await bcrypt.hash(password, 10);
-
+        email=email.toLowerCase();
         const { data: hr, error: hrInsertError } = await supabase
             .from("hr_table")
             .insert([{
@@ -105,7 +105,7 @@ const getAllHrs = async (req, res) => {
             .select('*');
         if (error) throw error;
 
-        res.status(200).json(data);
+        res.status(200).json({hrs:data});
     } catch (error) {
         res.status(500).json({ error: "Internal server error", details: error.message });
     }

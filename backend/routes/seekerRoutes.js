@@ -6,7 +6,7 @@ const router = express.Router();
 router.get('/', seekerController.getAllSeekers);
 router.get('/:id', seekerController.getSeekerById);
 router.post('/register', seekerController.registerSeeker);
-router.put("/update-profile/:id", authenticateUser,updateSeekerProfile);
+router.put("/update-profile/:id",updateSeekerProfile);
 router.get("/applied/:id",seekerController.getSavedJobs)
 router.get("/wishlist/:id",seekerController.getWishlist)
 router.delete("/delwishlist/:userId/:jobId",seekerController.delwishlist)
