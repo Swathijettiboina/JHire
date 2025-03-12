@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-// import HrCard from "./HrCard";
+import HrCard from "./HrCard";
 
 const API_BASE_URL = import.meta.env.API_BASE_URL || "http://localhost:5000/jhire";
 
@@ -47,14 +47,14 @@ const HrListing = () => {
   return (
     <div className="container mx-auto p-8 bg-gray-50 min-h-screen">
       <div className="mb-8 text-center">
-        <h1 className="text-4xl font-extrabold text-blue-950">HR Profiles</h1>
-        <p className="text-lg text-blue-600 mt-2">
+        <h1 className="text-4xl font-extrabold text-green-950">HR Profiles</h1>
+        <p className="text-lg text-green-600 mt-2">
           Explore our HR professionals specializing in various industries.
         </p>
       </div>
 
       {currentHrs.length === 0 ? (
-        <p className="text-center text-gray-500 text-lg">No HR profiles available.</p>
+        <p className="text-center text-green-500 text-lg">No HR profiles available.</p>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
           {currentHrs.map((hr) => (
@@ -69,7 +69,7 @@ const HrListing = () => {
         <div className="flex justify-center items-center mt-10 space-x-4">
           <button
             className={`px-5 py-2 rounded-full font-medium transition ${
-              currentPage === 1 ? "bg-gray-300 cursor-not-allowed" : "bg-blue-600 text-white"
+              currentPage === 1 ? "bg-gray-300 cursor-not-allowed" : "bg-green-600 text-white"
             }`}
             disabled={currentPage === 1}
             onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
@@ -81,7 +81,7 @@ const HrListing = () => {
 
           <button
             className={`px-5 py-2 rounded-full font-medium transition ${
-              currentPage === totalPages ? "bg-gray-300 cursor-not-allowed" : "bg-blue-600 text-white"
+              currentPage === totalPages ? "bg-gray-300 cursor-not-allowed" : "bg-green-600 text-white"
             }`}
             disabled={currentPage === totalPages}
             onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
