@@ -29,7 +29,7 @@ const SeekerProfileUpdate = () => {
     years_of_experience: "",
     previous_company: "",
     previous_job_role: "",
-    skills: "", 
+    skills: "",
     seeker_linkedin_profile: "",
     city_name: "",
     country_name: "",
@@ -42,30 +42,100 @@ const SeekerProfileUpdate = () => {
 
   useEffect(() => {
     if (!user?.id) return;
-  
+
     axios.get(`${API_BASE_URL}/seeker/${user.id}`)
       .then((response) => {
-        console.log("API Response:", response.data); // Debugging
-  
         if (!response.data || !Array.isArray(response.data.data) || response.data.data.length === 0) {
           console.error("Invalid response format or empty data", response.data);
           return;
         }
-  
-        const seekerData = response.data.data[0]; // Fix here to access the correct array
-  
+
+        const seekerData = response.data.data[0];
+
         setFormData((prev) => ({
           ...prev,
           ...seekerData,
           skills: Array.isArray(seekerData.skills) ? seekerData.skills.join(", ") : seekerData.skills || "",
         }));
-  
+
         setImagePreview(seekerData.profile_url || "https://placehold.co/150");
       })
       .catch((error) => {
         console.error("Error fetching seeker profile:", error);
       });
   }, [user?.id]);
+
+  // ✅ Universal function for handling both image & resume uploads
+  const handleFileChange = async (e, fileType) => {
+    const file = e.target.files[0];
+    if (!file || !user) return;
+  
+    const timestamp = Date.now();
+    const fileExt = file.name.split(".").pop();
+    const fileName = `${fileType}_${timestamp}.${fileExt}`;
+    const filePath = `seeker_profiles/${user.email}/${fileName}`;
+  
+    // 🔥 Extract and Delete Old File if Exists
+    if (formData[fileType]) {
+      try {
+        const oldFileUrl = new URL(formData[fileType]); // Convert to URL object
+        const pathSegments = oldFileUrl.pathname.split("/");
+  
+        if (pathSegments.length >= 4) {
+          const oldFilePath = pathSegments.slice(3).join("/"); // Extract after bucket
+          console.log(`Deleting old file: ${oldFilePath}`);
+  
+          const { error: deleteError } = await supabase.storage
+            .from("demoforuploadphotosandresumes")
+            .remove([oldFilePath]);
+  
+          if (deleteError) {
+            console.error(`Error deleting old ${fileType}:`, deleteError.message);
+          } else {
+            console.log(`✅ Successfully deleted old ${fileType}`);
+          }
+        }
+      } catch (deleteError) {
+        console.error("Failed to parse old file URL for deletion:", deleteError);
+      }
+    }
+  
+    // 🚀 Upload New File
+    const { error } = await supabase.storage
+      .from("demoforuploadphotosandresumes")
+      .upload(filePath, file, { upsert: true });
+  
+    if (error) {
+      console.error(`Upload error (${fileType}):`, error.message);
+      return;
+    }
+  
+    // 🎯 Get the new file URL
+    const { data } = supabase.storage
+      .from("demoforuploadphotosandresumes")
+      .getPublicUrl(filePath);
+  
+    if (data && data.publicUrl) {
+      const publicUrl = data.publicUrl;
+      console.log(`New ${fileType} uploaded: ${publicUrl}`);
+  
+      try {
+        // 🔄 Update the database with new URL
+        await axios.put(`${API_BASE_URL}/seeker/update-profile/${user.id}`, {
+          [fileType]: publicUrl,
+        });
+  
+        // 🌟 Update local state
+        setFormData((prev) => ({ ...prev, [fileType]: publicUrl }));
+  
+        if (fileType === "profile_url") {
+          setImagePreview(publicUrl);
+        }
+      } catch (err) {
+        console.error(`Error updating ${fileType} in database:`, err);
+      }
+    }
+  };
   
 
   const handleChange = (e) => {
@@ -73,43 +143,6 @@ const SeekerProfileUpdate = () => {
       ...prev,
       [e.target.name]: e.target.value ?? "",
     }));
-  };
-
-  const handleImageChange = async (e) => {
-    const file = e.target.files[0];
-    if (!file || !user) return;
-
-    const timestamp = Date.now();
-    const fileExt = file.name.split(".").pop();
-    const fileName = `profile_${timestamp}.${fileExt}`;
-    const filePath = `seeker_profiles/${user.email}/${fileName}`;
-
-    const { error } = await supabase.storage
-      .from("demoforuploadphotosandresumes")
-      .upload(filePath, file, { upsert: true });
-
-    if (error) {
-      console.error("Upload error:", error.message);
-      return;
-    }
-
-    const { data } = supabase.storage
-      .from("demoforuploadphotosandresumes")
-      .getPublicUrl(filePath);
-
-    if (data && data.publicUrl) {
-      const publicUrl = data.publicUrl;
-      console.log(publicUrl);
-      try {
-        await axios.put(`${API_BASE_URL}/seeker/update-profile/${user.id}`, {
-          profile_url: publicUrl,
-        });
-        setFormData((prev) => ({ ...prev, profile_url: publicUrl }));
-        setImagePreview(publicUrl);
-      } catch (err) {
-        console.error("Error updating profile in database:", err);
-      }
-    }
   };
 
   const handleSubmit = async (e) => {
@@ -146,8 +179,13 @@ const SeekerProfileUpdate = () => {
             className="w-full h-full object-cover"
           />
         </div>
-        <label className="mt-4 text-gray-700 font-medium">Upload Photo</label>
-        <input type="file" accept="image/*" onChange={handleImageChange} className="mt-2" />
+
+        {/* Upload Profile Photo */}
+        <label className="mt-4 text-gray-700 font-medium">Upload Profile Photo</label>
+        <input type="file" accept="image/*" onChange={(e) => handleFileChange(e, "profile_url")} className="mt-2" />
+
+       
+
         <p className="text-gray-600 mt-2">{formData.email}</p>
       </div>
 
@@ -156,7 +194,7 @@ const SeekerProfileUpdate = () => {
         <h2 className="text-lg font-semibold text-gray-700 mb-4">Personal Information</h2>
         <form onSubmit={handleSubmit} className="grid grid-cols-2 gap-4">
           {Object.keys(formData)
-            .filter((name) => !["seeker_id", "password_hash", "is_job_seeker", "profile_url", "email"].includes(name))
+            .filter((name) => !["seeker_id", "password_hash", "is_job_seeker", "profile_url", "email","resume"].includes(name))
             .map((name) => (
               <div key={name}>
                 <label className="block text-gray-700 font-medium">{name.replace(/_/g, " ").toUpperCase()}</label>
@@ -169,7 +207,19 @@ const SeekerProfileUpdate = () => {
                 />
               </div>
             ))}
-          <div className="col-span-2 flex justify-center">
+             {/* Upload Resume */}
+        <label className="mt-4 text-gray-700 font-medium p-2 border-2">Upload Resume (PDF/DOC)</label>
+        <input type="file" accept=".pdf,.doc,.docx" onChange={(e) => handleFileChange(e, "resume")} className="mt-5 ml-3" />
+
+        {/* Show Resume Link */}
+        {formData.resume && (
+          <p className="mt-2">
+            <a href={formData.resume} target="_blank" rel="noopener noreferrer" className="text-blue-600 underline">
+              View Uploaded Resume
+            </a>
+          </p>
+        )}
+          <div className="col-span-2 flex justify-center mt-2">
             <button type="submit" className="bg-gray-500 text-white px-6 py-2 rounded-lg hover:bg-gray-600">
               Update Profile
             </button>

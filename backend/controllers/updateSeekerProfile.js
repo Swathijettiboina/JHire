@@ -14,6 +14,7 @@ const updateSeekerProfile = async (req, res) => {
         years_of_experience,
         skills,
         seeker_linkedin_profile,
+        resume,
         profile_url
     } = req.body;
 
@@ -51,6 +52,7 @@ const updateSeekerProfile = async (req, res) => {
                 years_of_experience,
                 skills: formattedSkills,
                 seeker_linkedin_profile,
+                resume: resume || existingSeeker.resume,
                 profile_url: profile_url || existingSeeker.profile_url
             })
             .eq("seeker_id", id)

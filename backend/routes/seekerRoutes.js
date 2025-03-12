@@ -9,4 +9,5 @@ router.post('/register', seekerController.registerSeeker);
 router.put("/update-profile/:id", authenticateUser,updateSeekerProfile);
 router.get("/applied/:id",seekerController.getSavedJobs)
 router.get("/wishlist/:id",seekerController.getWishlist)
+router.delete("/delwishlist/:userId/:jobId",seekerController.delwishlist)
 module.exports = router;
