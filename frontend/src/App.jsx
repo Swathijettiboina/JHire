@@ -19,6 +19,8 @@ import Info from "./components/Pages/Info";
 import ViewCompany from "./components/CompanyComponents/ViewCompany";
 import CompanyListing from "./components/companyComponents/CompanyListing";
 import ContactPage from "./components/Pages/ContactPage";
+import ForgotPass from "./components/Auth/ForgotPass";
+
 
 
 
@@ -33,6 +35,7 @@ function App() {
           <Route path="/alljobs" element={<JobListing />} />
           <Route path="/hr-register" element={<HRSignUp />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/forgotpass" element={<ForgotPass />} />
           <Route path="/register" element={<JobSeekerRegistration />} />
           <Route path="/about" element={<About/>} />
           <Route path="/candidates" element={<SeekerListing />} />
