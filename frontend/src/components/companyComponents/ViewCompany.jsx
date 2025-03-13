@@ -24,10 +24,10 @@ const ViewCompany = () => {
 
         const companyResponse = await axios.get(`${API_BASE_URL}/companies/${companyId}`);
         setCompany(companyResponse.data || null);
-
-        const hrResponse = await axios.get(`${API_BASE_URL}/hr?company_id=${companyId}`);
+        console.log(company);
+        const hrResponse = await axios.get(`${API_BASE_URL}/hr/getHRsByCompany/${companyId}`);
         setHrListings(Array.isArray(hrResponse.data) ? hrResponse.data : []);
-
+        console.log(hrListings);
         const jobResponse = await axios.get(`${API_BASE_URL}/jobs?company_id=${companyId}`);
         setJobListings(Array.isArray(jobResponse.data) ? jobResponse.data : []);
 

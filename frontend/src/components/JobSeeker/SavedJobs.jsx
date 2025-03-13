@@ -10,7 +10,8 @@ const SavedJobs = () => {
   const { user } = useUser(); 
   const [savedJobs, setSavedJobs] = useState([]);
   const [error, setError] = useState(null);
-const navigate=useNavigate();
+  const navigate = useNavigate();
+
   useEffect(() => {
     if (!user?.id) return;
 
@@ -18,7 +19,7 @@ const navigate=useNavigate();
       try {
         const response = await axios.get(`${API_BASE_URL}/seeker/applied/${user.id}`);
         setSavedJobs(Array.isArray(response.data?.savedJobs) ? response.data.savedJobs : []);
-        console.log(response.data.savedJobs)
+        console.log(response.data.savedJobs);
       } catch (err) {
         setError(err.response?.data?.message || "Failed to fetch saved jobs.");
       }
@@ -37,8 +38,7 @@ const navigate=useNavigate();
         <p className="text-gray-600 text-lg">Not applied jobs yet.</p>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {savedJobs.map(({ job_id, job_title, job_location, job_type, company_table, date_posted,
-                job_status,applied_at }) => (
+          {savedJobs.map(({ job_id, job_title, job_location, job_type, company_table, date_posted, job_status, applied_at }) => (
             <div
               key={job_id}
               className="p-6 border rounded-xl shadow-md bg-white hover:shadow-lg transition-shadow"
@@ -62,20 +62,16 @@ const navigate=useNavigate();
               </p>
               <p className="text-gray-400 flex items-center gap-2 mt-1">
                 <FaBriefcase className="text-gray-500" />
-                job_posted:{date_posted}
+                Job posted: {date_posted}
               </p>
               <p className="text-gray-400 flex items-center gap-2 mt-1">
                 <FaBriefcase className="text-gray-500" />
-              applied_at:  {applied_at}
+                Applied at: {applied_at}
               </p>
-             
-              
             </div>
           ))}
         </div>
       )}
-
-      
     </div>
   );
 };

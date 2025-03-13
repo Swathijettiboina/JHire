@@ -19,6 +19,13 @@ import Info from "./components/Pages/Info";
 import ViewCompany from "./components/CompanyComponents/ViewCompany";
 import CompanyListing from "./components/companyComponents/CompanyListing";
 import ContactPage from "./components/Pages/ContactPage";
+<<<<<<< HEAD
+import ForgotPass from "./components/Auth/ForgotPass";
+
+=======
+import HRListings from "./components/HRComponents/HRListings";
+import ViewHRProfile from "./components/HRComponents/ViewHRProfile";
+>>>>>>> dfac16e16c574312cae9c25ca6bd2eb5add97e67
 
 
 
@@ -33,12 +40,14 @@ function App() {
           <Route path="/alljobs" element={<JobListing />} />
           <Route path="/hr-register" element={<HRSignUp />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/forgotpass" element={<ForgotPass />} />
           <Route path="/register" element={<JobSeekerRegistration />} />
           <Route path="/about" element={<About/>} />
           <Route path="/candidates" element={<SeekerListing />} />
           <Route path="/info" element={<Info />} />
           <Route path="/companies" element={<CompanyListing />} />
           <Route path="/contactus" element={<ContactPage/>}/>
+          <Route path="/recruiters" element={<HRListings/>}/>
 
           {/* protected routes are wrapped  */}
           <Route element={<ProtectedRoute />}>
@@ -48,6 +57,7 @@ function App() {
             <Route path="/post-job" element={<PostJobForm />} />
             <Route path="/hr/job-details/:job_id" element={<ViewJobAlongWIthApplicants />} />
             <Route path="/seeker-profile/:seeker_id" element={<ViewSeekerDetails />} />
+            <Route path="/hr/:hr_id" element={<ViewHRProfile />} />
             <Route path="/companies/:companyId" element={<ViewCompany />} />
           </Route>
         </Routes>

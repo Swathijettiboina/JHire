@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useUser } from "../../context/UserContext";
 import api from "../../api/axiosInstance";
 import { FaUser, FaLock, FaEye, FaEyeSlash } from "react-icons/fa";
@@ -90,6 +90,7 @@ const Login = () => {
               >
                 {showPassword ? <FaEyeSlash /> : <FaEye />}
               </span>
+              <Link to='/forgotpass'><p>Forgot Password?</p></Link>
             </div>
 
             {/* Login Button with Loading State */}

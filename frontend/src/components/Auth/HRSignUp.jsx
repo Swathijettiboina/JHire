@@ -89,6 +89,7 @@ const HRSignUp = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    console.log("Form Data:", formData);
     setErrorMessage("");
     setSuccessMessage("");
 
