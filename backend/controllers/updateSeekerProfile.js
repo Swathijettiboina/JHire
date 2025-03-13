@@ -1,5 +1,6 @@
 const supabase = require("../config/connectDb");
 const updateSeekerProfile = async (req, res) => {
+    console.log("Received update request:", req.body); // Log incoming request data
     const { id } = req.params;
     const {
         first_name,
@@ -18,7 +19,7 @@ const updateSeekerProfile = async (req, res) => {
         profile_url
     } = req.body;
 
-    console.log("Received update request:", req.body); // Log incoming request data
+   
 
     try {
         // Check if the seeker exists
